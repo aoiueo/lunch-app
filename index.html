@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>池袋ランチ決定くん Premium v2</title>
+    <title>池袋1丁目ランチ プレミアム・エディション</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { --main: #e67e22; --accent: #d35400; --bg: #f5f6fa; }
         body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
@@ -17,97 +18,65 @@
         button { background: var(--main); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; grid-column: span 2; }
         button:hover { background: var(--accent); }
 
-        /* ガチャ演出用アニメーション */
+        /* ガチャ演出 */
         .slot-animation { animation: slot-blur 0.1s infinite; opacity: 0.7; color: #95a5a6 !important; }
-        @keyframes slot-blur { 
-            0% { transform: translateY(-2px); filter: blur(1px); }
-            50% { transform: translateY(2px); filter: blur(2px); }
-            100% { transform: translateY(-2px); filter: blur(1px); }
-        }
+        @keyframes slot-blur { 0% { transform: translateY(-2px); filter: blur(1px); } 100% { transform: translateY(2px); filter: blur(1px); } }
         .pop-in { animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop-in { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* 結果表示レイアウト */
+        /* 結果表示 */
         #result-container { display: none; margin-top: 20px; }
         .result-layout { display: flex; flex-wrap: wrap; gap: 20px; text-align: left; }
         .info-panel { flex: 1; min-width: 300px; }
         .map-panel { flex: 1; min-width: 300px; height: 350px; border-radius: 15px; overflow: hidden; border: 1px solid #eee; }
         
-        .shop-name { font-size: 1.8rem; font-weight: bold; color: var(--accent); margin-bottom: 10px; }
-        .budget-icon { display: inline-block; background: #f1f2f6; color: #2f3542; padding: 2px 8px; border-radius: 8px; font-size: 0.9rem; margin-left: 10px; vertical-align: middle; border: 1px solid #ced4da; }
+        .shop-name { font-size: 1.6rem; font-weight: bold; color: var(--accent); margin-bottom: 10px; }
+        .budget-badge { display: inline-block; background: #2f3542; color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.9rem; margin-left: 10px; vertical-align: middle; }
         .recommend-box { background: #fff9f0; border-left: 5px solid var(--main); padding: 10px 15px; margin: 15px 0; }
         .tag { display: inline-block; padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; margin-right: 5px; background: #eee; }
-        .status-open { color: #27ae60; font-weight: bold; }
-        .status-closed { color: #e74c3c; font-weight: bold; }
         iframe { width: 100%; height: 100%; border: none; }
-
-        @media (max-width: 600px) {
-            .search-grid { grid-template-columns: 1fr; }
-            button { grid-column: span 1; }
-            .result-layout { flex-direction: column; }
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="card">
-        <h2 style="margin-top:0; color:var(--main);">📍 池袋1丁目ランチ プレミアム v2</h2>
+        <h2 style="margin-top:0; color:var(--main);">📍 池袋1丁目ランチ ガチャ Premium</h2>
         <div class="search-grid">
             <div>
                 <label>ジャンル</label>
                 <select id="category">
                     <option value="any">なんでも</option>
-                    <option value="定食">🍚 定食・お米</option>
-                    <option value="ラーメン">🍜 ラーメン・つけ麺</option>
-                    <option value="中華">🐼 中華・エスニック</option>
-                    <option value="ヘルシー">🥗 ヘルシー・和食</option>
-                    <option value="カフェ">☕ カフェ・パン</option>
-                    <option value="クイック">⚡ 早い・安い</option>
+                    <option value="イタリア料理">🇮🇹 イタリアン</option>
+                    <option value="中華料理">🐼 中華・湖南料理</option>
+                    <option value="レストラン">🍴 レストラン・洋食</option>
+                    <option value="定食屋">🍚 定食・和食</option>
+                    <option value="カフェ・喫茶">☕ カフェ</option>
                 </select>
             </div>
             <div>
-                <label>今の気分</label>
-                <select id="mood">
-                    <option value="any">なんでも</option>
-                    <option value="がっつり">🔥 がっつり</option>
-                    <option value="あっさり">🍃 あっさり</option>
-                </select>
-            </div>
-            <div>
-                <label>距離</label>
-                <select id="distance">
-                    <option value="any">指定なし</option>
-                    <option value="近場">近場（5分以内）</option>
-                    <option value="遠出">少し歩く（10分〜）</option>
-                </select>
-            </div>
-            <div>
-                <label>予算</label>
+                <label>予算上限</label>
                 <select id="budget">
-                    <option value="any">指定なし</option>
+                    <option value="99999">指定なし</option>
                     <option value="1000">1,000円以内</option>
-                    <option value="1500">1,500円以内</option>
-                    <option value="2000">2,000円以上</option>
+                    <option value="2000">2,000円以内</option>
+                    <option value="3000">3,000円以内</option>
                 </select>
             </div>
             <button onclick="decideLunch()">運命の1店をガチャで決める！</button>
         </div>
-        <div id="history-info" style="font-size: 0.7rem; color: #999; text-align: center;"></div>
     </div>
 
     <div id="result-container" class="card">
         <div class="result-layout">
             <div class="info-panel">
-                <div id="status"></div>
                 <div id="result-name" class="shop-name"></div>
                 <div id="tags"></div>
                 <div class="recommend-box">
-                    <div style="font-size: 0.8rem; color: #e67e22; font-weight: bold;">🌟 おすすめメニュー</div>
-                    <div id="recommend-menu" style="font-size: 1.1rem; margin-top: 5px;"></div>
+                    <div style="font-size: 0.8rem; color: #e67e22; font-weight: bold;">📋 お店の特徴・口コミ</div>
+                    <div id="recommend-menu" style="font-size: 0.95rem; margin-top: 5px; line-height: 1.4;"></div>
                 </div>
                 <div id="result-time" style="font-size: 0.9rem; color: #666;"></div>
-                <button onclick="resetHistory()" style="background:#999; margin-top:20px; padding:8px; font-size: 0.7rem; grid-column: auto;">履歴をリセット</button>
             </div>
             <div class="map-panel" id="map-area"></div>
         </div>
@@ -115,47 +84,36 @@
 </div>
 
 <script>
-    // データベース（代表的なお店をリスト化）
+    // スクレイピングデータを整形して投入
     const shops = [
-        { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", price: 1000, open: 11, close: 22 },
-        { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", price: 1000, open: 11, close: 22 },
-        { name: "しんぱち食堂 西池袋店", cat: "定食", sub: "あっさり", menu: "サーモンハラス干し定食", dist: "近場", price: 1000, open: 7, close: 23 },
-        { name: "蒙古タンメン中本 池袋店", cat: "ラーメン", sub: "がっつり", menu: "蒙古タンメン", dist: "近場", price: 1000, open: 11, close: 24 },
-        { name: "鶏そば 壽", cat: "ラーメン", sub: "あっさり", menu: "レモン鶏そば", dist: "近場", price: 1000, open: 11, close: 23 },
-        { name: "牛かつ もと村 池袋店", cat: "定食", sub: "がっつり", menu: "牛かつ定食", dist: "遠出", price: 2000, open: 11, close: 22 },
-        { name: "銀座 篝 池袋店", cat: "ラーメン", sub: "あっさり", menu: "鶏白湯そば", dist: "遠出", price: 1500, open: 11, close: 22 },
-        { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", price: 1000, open: 11, close: 23 },
-        { name: "小諸そば 池袋店", cat: "クイック", sub: "あっさり", menu: "二枚もり", dist: "近場", price: 1000, open: 7, close: 21 },
-        { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", price: 1500, open: 11, close: 22 }
-        // ※同様の形式で100店舗まで増やせます
+        { name: "湘聚・湖南菜館", cat: "中華料理", min_price: 1000, max_price: 2000, rating: "4.8", info: "ランチも良く、しかも午後4時まで営業しています。", addr: "西池袋１丁目３８−５" },
+        { name: "金のイタリアン", cat: "イタリア料理", min_price: 1000, max_price: 1500, rating: "4.3", info: "リラックスした空間で洗練された料理。ランチ待たずに入店できました。", addr: "東池袋１丁目１５−５" },
+        { name: "Espresso D Works 池袋", cat: "カフェ・喫茶", min_price: 2000, max_price: 3000, rating: "4.5", info: "平日ランチコースが美味しく楽しめた。", addr: "東池袋１丁目３０−３" },
+        { name: "楽楽屋 池袋本店", cat: "中華料理", min_price: 2000, max_price: 2500, rating: "4.1", info: "落ち着いた雰囲気のアジア料理。少し高めの予算が必要。", addr: "西池袋１丁目３６−４" },
+        { name: "イケチカ ダイニング", cat: "レストラン", min_price: 1000, max_price: 2000, rating: "3.9", info: "小丼と蕎麦セットは種類も多くて美味しいです。", addr: "西池袋１丁目１−６" },
+        { name: "ナポリの下町食堂池袋店", cat: "イタリア料理", min_price: 1000, max_price: 2000, rating: "3.8", info: "ランチは大盛り無料、サラダとドリンクバー付き。", addr: "西池袋１丁目１５−５" },
+        { name: "三浦のハンバーグ", cat: "レストラン", min_price: 1000, max_price: 2000, rating: "4.1", info: "ご飯と味噌汁おかわり無料。コスパ最高。", addr: "東池袋１丁目２３−９" },
+        { name: "神田たまごけん 池袋WACCA店", cat: "レストラン", min_price: 1000, max_price: 2000, rating: "4.6", info: "たまごけんプレートとミニサラダが人気。", addr: "東池袋１丁目８−１" },
+        { name: "洋庖丁 池袋店", cat: "レストラン", min_price: 800, max_price: 1000, rating: "4.0", info: "ランチ～1,000円とコスパ重視層に強く響く設定。", addr: "池袋２丁目４１−６" },
+        { name: "イタリアンダイニングDiletto", cat: "イタリア料理", min_price: 1200, max_price: 1500, rating: "4.5", info: "ランチパスタとサラダとドリンクがついて1200円。", addr: "池袋４丁目２６−１" },
+        { name: "ランチハウス ミトヤ", cat: "定食屋", min_price: 800, max_price: 1000, rating: "4.0", info: "がっつり食べたいとき、真っ先に思い浮かぶお店。", addr: "西池袋３丁目３０−１０" },
+        { name: "みなと", cat: "定食屋", min_price: 1000, max_price: 2000, rating: "3.8", info: "ランチで利用し、刺身定食が人気。", addr: "西池袋１丁目３７−１２" }
     ];
 
     function decideLunch() {
         const cat = document.getElementById('category').value;
-        const mood = document.getElementById('mood').value;
-        const dist = document.getElementById('distance').value;
-        const budget = document.getElementById('budget').value;
+        const budget = parseInt(document.getElementById('budget').value);
         
-        let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
-
         let filtered = shops.filter(s => {
-            const matchCat = (cat === 'any' || s.cat === cat);
-            const matchMood = (mood === 'any' || s.sub === mood);
-            const matchDist = (dist === 'any' || s.dist === dist);
-            const matchBudget = (budget === 'any' || s.price <= parseInt(budget) || (budget === "2000" && s.price >= 2000));
-            const notVisited = !history.includes(s.name);
-            return matchCat && matchMood && matchDist && matchBudget && notVisited;
+            const matchCat = (cat === 'any' || s.cat.includes(cat));
+            const matchBudget = (s.min_price <= budget);
+            return matchCat && matchBudget;
         });
 
-        if (filtered.length === 0) {
-            filtered = shops.filter(s => (cat === 'any' || s.cat === cat) && (mood === 'any' || s.sub === mood));
-            if(filtered.length > 0) alert("未訪問店を一周しました！全リストから再抽選します。");
-            else { alert("条件に合うお店がありません！"); return; }
-        }
+        if (filtered.length === 0) { alert("条件に合うお店がありません！"); return; }
 
         const nameDisplay = document.getElementById('result-name');
         document.getElementById('result-container').style.display = 'block';
-        nameDisplay.classList.remove('pop-in');
         nameDisplay.classList.add('slot-animation'); 
         
         let count = 0;
@@ -168,62 +126,27 @@
                 clearInterval(slotTimer);
                 nameDisplay.classList.remove('slot-animation');
                 const chosen = filtered[Math.floor(Math.random() * filtered.length)];
-                history.push(chosen.name);
-                sessionStorage.setItem('lunch_history', JSON.stringify(history));
+                
+                // 紙吹雪を飛ばす！
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                
                 nameDisplay.classList.add('pop-in');
                 displayResult(chosen);
-                updateHistoryCount(history.length);
             }
         }, 80);
     }
 
-/* ↓ これを貼り付けます */
-function displayResult(shop) {
-    // 予算の数値を具体的なテキストに変換
-    let priceText = "";
-    if (shop.price <= 1000) priceText = "〜1,000円";
-    else if (shop.price <= 1500) priceText = "1,001〜1,500円";
-    else priceText = "2,000円〜";
+    function displayResult(shop) {
+        const priceText = `${shop.min_price.toLocaleString()}円〜${shop.max_price.toLocaleString()}円`;
+        document.getElementById('result-name').innerHTML = `${shop.name} <span class="budget-badge">${priceText}</span>`;
+        document.getElementById('recommend-menu').innerText = shop.info;
+        document.getElementById('tags').innerHTML = `<span class="tag">${shop.cat}</span><span class="tag">⭐ ${shop.rating}</span>`;
+        document.getElementById('result-time').innerHTML = `住所: ${shop.addr}`;
 
-    // 店名と具体的な金額バッジを表示
-    document.getElementById('result-name').innerHTML = 
-        `${shop.name} <span class="budget-icon">${priceText}</span>`;
-    
-    document.getElementById('recommend-menu').innerText = shop.menu;
-    
-    // 営業判定
-    const hour = new Date().getHours();
-    const isOpen = (hour >= shop.open && hour < shop.close);
-    document.getElementById('status').innerHTML = isOpen ? 
-        '<span class="status-open">● 営業中</span>' : 
-        '<span class="status-closed">○ 営業時間外かも</span>';
-    
-    // タグの表示
-    document.getElementById('tags').innerHTML = 
-        `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
-    
-    // 詳細情報に予算と営業時間を表示
-    /* ↓ これに差し替えます */
-    document.getElementById('result-time').innerHTML = `営業時間目安: ${shop.open}:00 〜 ${shop.close}:00`;
-    
-    // マップ表示
-    const q = encodeURIComponent(shop.name + " 池袋");
-    document.getElementById('map-area').innerHTML = 
-        `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
-    
-    window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
-}
-
-    function resetHistory() {
-        sessionStorage.removeItem('lunch_history');
-        location.reload();
+        const q = encodeURIComponent(shop.name + " 池袋");
+        document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
+        window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
     }
-
-    function updateHistoryCount(count) {
-        document.getElementById('history-info').innerText = `本日チェックした件数: ${count}件`;
-    }
-
-    updateHistoryCount(JSON.parse(sessionStorage.getItem('lunch_history') || "[]").length);
 </script>
 
 </body>
