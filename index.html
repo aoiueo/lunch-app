@@ -178,10 +178,11 @@
         }, 80);
     }
 
-    function displayResult(shop) {
-        // 金額の幅を表示
+function displayResult(shop) {
+        // 金額の幅を作成（例：1,000円〜1,500円）
         const priceRange = `${shop.min.toLocaleString()}円〜${shop.max.toLocaleString()}円`;
-        document.getElementById('result-name').innerHTML = `${shop.name} <span class="budget-badge">${priceRange}</span>`;
+        // HTMLに流し込む
+        document.getElementById('result-name').innerHTML = `${shop.name} <span class="budget-badge" style="display: inline-block; background: #2f3542; color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.9rem; margin-left: 10px; vertical-align: middle;">${priceRange}</span>`;
         document.getElementById('recommend-menu').innerText = shop.menu;
         
         const hour = new Date().getHours();
