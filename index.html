@@ -44,28 +44,45 @@
     <div class="card">
         <h2 style="margin-top:0; color:var(--main);">📍 池袋1丁目ランチ プレミアム</h2>
         <div class="search-grid">
-            <div>
-                <label>ジャンル</label>
-                <select id="category">
-                    <option value="any">なんでも</option>
-                    <option value="定食">🍚 定食・お米</option>
-                    <option value="ラーメン">🍜 ラーメン・つけ麺</option>
-                    <option value="中華">🐼 中華・エスニック</option>
-                    <option value="ヘルシー">🥗 ヘルシー・和食</option>
-                    <option value="カフェ">☕ カフェ・パン</option>
-                    <option value="クイック">⚡ 早い・安い</option>
-                </select>
-            </div>
-            <div>
-                <label>今の気分</label>
-                <select id="mood">
-                    <option value="any">なんでも</option>
-                    <option value="がっつり">🔥 がっつり</option>
-                    <option value="あっさり">🍃 あっさり</option>
-                </select>
-            </div>
-            <button onclick="decideLunch()">今日のお店を決める（未訪問優先）</button>
-        </div>
+    <div>
+        <label>ジャンル</label>
+        <select id="category">
+            <option value="any">なんでも</option>
+            <option value="定食">🍚 定食・お米</option>
+            <option value="ラーメン">🍜 ラーメン・つけ麺</option>
+            <option value="中華">🐼 中華・エスニック</option>
+            <option value="ヘルシー">🥗 ヘルシー・和食</option>
+            <option value="カフェ">☕ カフェ・パン</option>
+            <option value="クイック">⚡ 早い・安い</option>
+        </select>
+    </div>
+    <div>
+        <label>今の気分</label>
+        <select id="mood">
+            <option value="any">なんでも</option>
+            <option value="がっつり">🔥 がっつり</option>
+            <option value="あっさり">🍃 あっさり</option>
+        </select>
+    </div>
+    <div>
+        <label>距離（池袋1丁目から）</label>
+        <select id="distance">
+            <option value="any">指定なし</option>
+            <option value="近場">近場（5分以内）</option>
+            <option value="遠出">少し歩く（10分〜）</option>
+        </select>
+    </div>
+    <div>
+        <label>予算</label>
+        <select id="budget">
+            <option value="any">指定なし</option>
+            <option value="1000">1,000円以内</option>
+            <option value="1500">1,500円以内</option>
+            <option value="2000">2,000円以上</option>
+        </select>
+    </div>
+    <button onclick="decideLunch()">今日のお店を決める（未訪問優先）</button>
+</div>
         <div id="history-info" style="font-size: 0.7rem; color: #999; text-align: center;"></div>
     </div>
 
