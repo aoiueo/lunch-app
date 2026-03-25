@@ -117,18 +117,28 @@
 <script>
     // 1. データベース：priceをminとmaxに分割
     const shops = [
-        { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", min: 900, max: 1100, open: 11, close: 22 },
-        { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
-        { name: "しんぱち食堂 西池袋店", cat: "定食", sub: "あっさり", menu: "サーモンハラス干し定食", dist: "近場", min: 700, max: 1000, open: 7, close: 23 },
-        { name: "蒙古タンメン中本 池袋店", cat: "ラーメン", sub: "がっつり", menu: "蒙古タンメン", dist: "近場", min: 850, max: 1200, open: 11, close: 24 },
-        { name: "鶏そば 壽", cat: "ラーメン", sub: "あっさり", menu: "レモン鶏そば", dist: "近場", min: 900, max: 1300, open: 11, close: 23 },
-        { name: "牛かつ もと村 池袋店", cat: "定食", sub: "がっつり", menu: "牛かつ定食", dist: "遠出", min: 1600, max: 2500, open: 11, close: 22 },
-        { name: "銀座 篝 池袋店", cat: "ラーメン", sub: "あっさり", menu: "鶏白湯そば", dist: "遠出", min: 1200, max: 1800, open: 11, close: 22 },
-        { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", min: 800, max: 1200, open: 11, close: 23 },
-        { name: "小諸そば 池袋店", cat: "クイック", sub: "あっさり", menu: "二枚もり", dist: "近場", min: 400, max: 700, open: 7, close: 21 },
-        { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", min: 1200, max: 2200, open: 11, close: 22 }
-    ];
-
+    { name: "竈門ご飯一穀 池袋西口店", cat: "定食", sub: "あっさり", menu: "一穀定食", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+    { name: "ナポリの下町食堂池袋店", cat: "イタリアン", sub: "あっさり", menu: "サラダ付きパスタランチ", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+    { name: "イケチカ ダイニング", cat: "定食", sub: "あっさり", menu: "蕎麦とおつまみセット", dist: "近場", min: 1000, max: 2000, open: 11, close: 23 },
+    { name: "湘聚・湖南菜館", cat: "中華", sub: "がっつり", menu: "本場の中華料理", dist: "近場", min: 1500, max: 3000, open: 11, close: 23 },
+    { name: "金のイタリアン", cat: "イタリアン", sub: "あっさり", menu: "洗練されたパスタランチ", dist: "遠出", min: 1000, max: 2500, open: 11, close: 22 },
+    { name: "ランチハウス ミトヤ", cat: "定食", sub: "がっつり", menu: "とんかつ定食", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
+    { name: "楽楽屋 池袋本店", cat: "中華", sub: "がっつり", menu: "選べる中華ランチ", dist: "近場", min: 800, max: 1500, open: 11, close: 23 },
+    { name: "ブラッスリー レトン", cat: "フランス料理", sub: "あっさり", menu: "コースランチ", dist: "近場", min: 2000, max: 4000, open: 11, close: 21 },
+    { name: "北海道イタリアンミアボッカ", cat: "イタリアン", sub: "あっさり", menu: "北海道食材パスタ", dist: "近場", min: 2000, max: 3000, open: 11, close: 22 },
+    { name: "あんぷく池袋店", cat: "うどん", sub: "あっさり", menu: "名物カルボナーラうどん", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+    { name: "大かまど飯 寅福", cat: "定食", sub: "あっさり", menu: "大かまど飯定食", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+    { name: "トロ政 池袋店", cat: "和食", sub: "がっつり", menu: "海鮮丼ランチ", dist: "近場", min: 1000, max: 2500, open: 11, close: 22 },
+    { name: "沖縄食堂 やんばる池袋店", cat: "和食", sub: "あっさり", menu: "ソーキそば", dist: "遠出", min: 800, max: 1200, open: 11, close: 23 },
+    { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", min: 800, max: 1000, open: 11, close: 21 },
+    { name: "TOMBOY 池袋東口店", cat: "カレー", sub: "がっつり", menu: "本格インドカレー", dist: "遠出", min: 1000, max: 2000, open: 11, close: 23 },
+    { name: "爽亭 JR池袋駅店", cat: "クイック", sub: "あっさり", menu: "かき揚げそば", dist: "近場", min: 400, max: 800, open: 7, close: 23 },
+    { name: "みなと", cat: "和食", sub: "がっつり", menu: "ガッツリ海鮮丼", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+    { name: "びすとろ UOKIN 池袋", cat: "ビストロ", sub: "あっさり", menu: "魚金の洋食ランチ", dist: "近場", min: 1200, max: 2500, open: 11, close: 23 },
+    { name: "一心", cat: "定食", sub: "がっつり", menu: "チーズメンチカツ定食", dist: "近場", min: 800, max: 1000, open: 11, close: 21 },
+    { name: "かえる食堂", cat: "カレー", sub: "がっつり", menu: "手作りカレー", dist: "遠出", min: 900, max: 1200, open: 11, close: 15 }
+];
+    
     function decideLunch() {
         const cat = document.getElementById('category').value;
         const mood = document.getElementById('mood').value;
