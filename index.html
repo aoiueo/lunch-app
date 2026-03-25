@@ -203,9 +203,9 @@ function displayResult(shop) {
         `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
     
     // 詳細情報に予算と営業時間を表示
-    document.getElementById('result-time').innerHTML = 
-        `予算目安: <strong>${priceText}</strong><br>営業時間目安: ${shop.open}:00 〜 ${shop.close}:00`;
-
+    /* ↓ これに差し替えます */
+    document.getElementById('result-time').innerHTML = `営業時間目安: ${shop.open}:00 〜 ${shop.close}:00`;
+    
     // マップ表示
     const q = encodeURIComponent(shop.name + " 池袋");
     document.getElementById('map-area').innerHTML = 
