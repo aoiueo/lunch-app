@@ -3,25 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>池袋ランチ決定くん Pro</title>
+    <title>池袋ランチ決定くん Pro+</title>
     <style>
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; padding: 20px; background: #f4f7f6; color: #333; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
-        h2 { color: #e67e22; margin-bottom: 20px; }
-        label { display: block; text-align: left; margin: 10px 0 5px; font-weight: bold; font-size: 0.9rem; }
-        select, button { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px; outline: none; }
-        button { background: #e67e22; color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 10px; }
-        button:hover { background: #d35400; transform: translateY(-2px); }
-        #result-container { margin-top: 25px; padding-top: 20px; border-top: 2px dashed #eee; display: none; }
-        #result-name { font-size: 1.4rem; font-weight: bold; color: #d35400; margin-bottom: 15px; }
-        .map-container { position: relative; width: 100%; height: 300px; border-radius: 15px; overflow: hidden; border: 1px solid #ddd; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; padding: 20px; background: #f0f2f5; color: #333; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        h2 { color: #d35400; margin-bottom: 20px; font-size: 1.5rem; }
+        label { display: block; text-align: left; margin: 15px 0 5px; font-weight: bold; font-size: 0.9rem; color: #555; }
+        select, button { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; appearance: none; }
+        button { background: #ff7e5f; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 15px; box-shadow: 0 4px 15px rgba(255,126,95,0.3); }
+        button:hover { background: #feb47b; transform: translateY(-1px); }
+        
+        #result-container { margin-top: 25px; padding: 20px; border-radius: 15px; background: #fffaf0; border: 2px solid #ffeaa7; display: none; }
+        #result-name { font-size: 1.5rem; font-weight: bold; color: #d35400; margin-bottom: 5px; }
+        .info-tag { display: inline-block; padding: 4px 10px; border-radius: 5px; font-size: 0.8rem; margin-bottom: 10px; font-weight: bold; }
+        .open { background: #e1f5fe; color: #0288d1; }
+        .time-text { font-size: 0.9rem; color: #666; margin-bottom: 15px; }
+        
+        .map-container { width: 100%; height: 250px; border-radius: 12px; overflow: hidden; border: 1px solid #eee; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>🍴 池袋ランチ決定くん</h2>
+    <h2>池袋ランチ決定くん Pro+</h2>
     
     <label>ジャンル</label>
     <select id="type">
@@ -30,62 +35,41 @@
         <option value="麺">ラーメン・うどん・そば</option>
     </select>
 
-    <label>距離（池袋1丁目から）</label>
+    <label>距離</label>
     <select id="distance">
-        <option value="近場">近場（徒歩5分以内）</option>
-        <option value="遠出">少し歩く（徒歩10分〜）</option>
+        <option value="近場">近場（5分以内）</option>
+        <option value="遠出">少し歩く（10分〜）</option>
     </select>
 
-    <label>今の気分</label>
+    <label>気分</label>
     <select id="mood">
-        <option value="ガッツリ">ガッツリ食べたい！</option>
-        <option value="あっさり">あっさり済ませたい</option>
+        <option value="ガッツリ">ガッツリ！</option>
+        <option value="あっさり">あっさり</option>
     </select>
 
-    <button onclick="decideLunch()">運命の1店を検索！</button>
+    <button onclick="decideLunch()">今日のご飯を決める</button>
 
     <div id="result-container">
-        <div id="result-text">今日のご飯はここだ！</div>
+        <div id="status-tag" class="info-tag"></div>
         <div id="result-name"></div>
-        <div class="map-container" id="map-area">
-            </div>
+        <div id="result-time" class="time-text"></div>
+        <div class="map-container" id="map-area"></div>
     </div>
 </div>
 
 <script>
     const shops = [
-        // --- 麺類 ---
-        { name: "鶏そば 壽", type: "麺", distance: "近場", mood: "あっさり" },
-        { name: "蒙古タンメン中本 池袋店", type: "麺", distance: "近場", mood: "ガッツリ" },
-        { name: "麺屋武蔵 二天", type: "麺", distance: "近場", mood: "ガッツリ" },
-        { name: "屯ちん 池袋本店", type: "麺", distance: "遠出", mood: "ガッツリ" },
-        { name: "らーめん はやし田 池袋店", type: "麺", distance: "遠出", mood: "あっさり" },
-        { name: "うちたて家", type: "麺", distance: "遠出", mood: "ガッツリ" },
-        { name: "六坊担担面", type: "麺", distance: "遠出", mood: "ガッツリ" },
-        { name: "銀座 篝 池袋店", type: "麺", distance: "遠出", mood: "あっさり" },
-        { name: "油そば 鈴の木", type: "麺", distance: "近場", mood: "ガッツリ" },
-        { name: "小諸そば 池袋店", type: "麺", distance: "近場", mood: "あっさり" },
-        // --- 米 ---
-        { name: "キッチンABC 西池袋店", type: "米", distance: "近場", mood: "ガッツリ" },
-        { name: "しんぱち食堂 西池袋店", type: "米", distance: "近場", mood: "あっさり" },
-        { name: "牛かつ もと村 池袋店", type: "米", distance: "遠出", mood: "ガッツリ" },
-        { name: "大戸屋 ごはん処 池袋西口店", type: "米", distance: "近場", mood: "あっさり" },
-        { name: "洋庖丁 池袋店", type: "米", distance: "近場", mood: "ガッツリ" },
-        { name: "カレーは飲み物。池袋店", type: "米", distance: "遠出", mood: "ガッツリ" },
-        { name: "じとっこ組合 池袋北口店", type: "米", distance: "近場", mood: "ガッツリ" },
-        { name: "伝説のすた丼屋 池袋店", type: "米", distance: "近場", mood: "ガッツリ" },
-        { name: "丸亀製麺 池袋店", type: "米", distance: "遠出", mood: "あっさり" },
-        { name: "火星カレー", type: "米", distance: "遠出", mood: "ガッツリ" },
-        { name: "ねぎし 池袋駅西口店", type: "米", distance: "近場", mood: "あっさり" },
-        // --- パン ---
-        { name: "バーガーキング 池袋立教通り店", type: "パン", distance: "近場", mood: "ガッツリ" },
-        { name: "メゾン・カイザー 池袋サンシャイン店", type: "パン", distance: "遠出", mood: "あっさり" },
-        { name: "J.S. BURGERS CAFE 池袋店", type: "パン", distance: "遠出", mood: "ガッツリ" },
-        { name: "タカセ 池袋本店", type: "パン", distance: "遠出", mood: "あっさり" },
-        { name: "ウェンディーズ 池袋北口店", type: "パン", distance: "近場", mood: "ガッツリ" },
-        { name: "サンマルクカフェ 池袋メトロポリタン口店", type: "パン", distance: "遠出", mood: "あっさり" },
-        { name: "フレッシュネスバーガー 池袋西口店", type: "パン", distance: "近場", mood: "ガッツリ" },
-        { name: "コメダ珈琲店 西武池袋前店", type: "パン", distance: "遠出", mood: "ガッツリ" }
+        // 営業時間は目安（11:00〜15:00をランチとして設定）
+        { name: "キッチンABC 西池袋店", type: "米", distance: "近場", mood: "ガッツリ", open: 11, close: 22 },
+        { name: "しんぱち食堂 西池袋店", type: "米", distance: "近場", mood: "あっさり", open: 7, close: 23 },
+        { name: "蒙古タンメン中本 池袋店", type: "麺", distance: "近場", mood: "ガッツリ", open: 11, close: 24 },
+        { name: "鶏そば 壽", type: "麺", distance: "近場", mood: "あっさり", open: 11, close: 23 },
+        { name: "洋庖丁 池袋店", type: "米", distance: "近場", mood: "ガッツリ", open: 11, close: 22 },
+        { name: "タカセ 池袋本店", type: "パン", distance: "遠出", mood: "あっさり", open: 9, close: 22 },
+        { name: "麺屋武蔵 二天", type: "麺", distance: "近場", mood: "ガッツリ", open: 11, close: 22 },
+        { name: "カレーは飲み物。池袋店", type: "米", distance: "遠出", mood: "ガッツリ", open: 11, close: 21 },
+        { name: "らーめん はやし田 池袋店", type: "麺", distance: "遠出", mood: "あっさり", open: 11, close: 23 }
+        // ...必要に応じて追加
     ];
 
     function decideLunch() {
@@ -93,29 +77,35 @@
         const distance = document.getElementById('distance').value;
         const mood = document.getElementById('mood').value;
 
-        const filteredShops = shops.filter(shop => 
-            shop.type === type && shop.distance === distance && shop.mood === mood
-        );
+        const filtered = shops.filter(s => s.type === type && s.distance === distance && s.mood === mood);
+        const container = document.getElementById('result-container');
 
-        const resultContainer = document.getElementById('result-container');
-        const resultName = document.getElementById('result-name');
-        const mapArea = document.getElementById('map-area');
-        
-        if (filteredShops.length > 0) {
-            const chosen = filteredShops[Math.floor(Math.random() * filteredShops.length)];
+        if (filtered.length > 0) {
+            const chosen = filtered[Math.floor(Math.random() * filtered.length)];
             
-            // 店名を表示
-            resultName.innerText = `「${chosen.name}」`;
-            resultContainer.style.display = 'block';
+            // 現在時刻の判定
+            const now = new Date();
+            const hour = now.getHours();
+            const statusTag = document.getElementById('status-tag');
+            
+            if (hour >= chosen.open && hour < chosen.close) {
+                statusTag.innerText = "● 営業中";
+                statusTag.style.color = "#2ecc71";
+            } else {
+                statusTag.innerText = "○ 営業時間外かも";
+                statusTag.style.color = "#e74c3c";
+            }
 
-            // Googleマップの埋め込み（店名で検索）
-            const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(chosen.name + " 池袋")}&output=embed`;
-            mapArea.innerHTML = `<iframe src="${mapUrl}" allowfullscreen></iframe>`;
+            document.getElementById('result-name').innerText = chosen.name;
+            document.getElementById('result-time').innerText = `目安：${chosen.open}:00 〜 ${chosen.close}:00`;
             
+            const mapUrl = `https://www.google.com/maps/embed/v1/search?key=YOUR_API_KEY_OR_FREE_METHOD&q=${encodeURIComponent(chosen.name + " 池袋")}`;
+            // 簡易的な埋め込み方法に変更
+            document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${encodeURIComponent(chosen.name + " 池袋")}"></iframe>`;
+            
+            container.style.display = 'block';
         } else {
-            resultName.innerText = "該当なし...条件を変えてみて！";
-            mapArea.innerHTML = "";
-            resultContainer.style.display = 'block';
+            alert("条件に合うお店がありません！");
         }
     }
 </script>
