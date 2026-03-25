@@ -4,30 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>池袋ランチ決定くん Premium</title>
-/* --- ここから貼り付け --- */
-/* ガチャ演出中のアニメーション */
-.slot-animation {
-    animation: slot-blur 0.1s infinite;
-    opacity: 0.7;
-    color: #95a5a6 !important;
-}
+    <style>
+        :root { --main: #e67e22; --accent: #d35400; --bg: #f5f6fa; }
+        body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: auto; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        
+        /* 検索フォーム */
+        .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        label { font-size: 0.8rem; font-weight: bold; color: #666; display: block; margin-bottom: 5px; }
+        select, button { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; outline: none; }
+        button { background: var(--main); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; grid-column: span 2; }
+        button:hover { background: var(--accent); }
 
-@keyframes slot-blur {
-    0% { transform: translateY(-2px); filter: blur(1px); }
-    50% { transform: translateY(2px); filter: blur(2px); }
-    100% { transform: translateY(-2px); filter: blur(1px); }
-}
+        /* 結果表示レイアウト */
+        #result-container { display: none; margin-top: 20px; }
+        .result-layout { display: flex; flex-wrap: wrap; gap: 20px; text-align: left; }
+        .info-panel { flex: 1; min-width: 300px; }
+        .map-panel { flex: 1; min-width: 300px; height: 350px; border-radius: 15px; overflow: hidden; border: 1px solid #eee; }
+        
+        .shop-name { font-size: 1.8rem; font-weight: bold; color: var(--accent); margin-bottom: 10px; }
+        .recommend-box { background: #fff9f0; border-left: 5px solid var(--main); padding: 10px 15px; margin: 15px 0; }
+        .tag { display: inline-block; padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; margin-right: 5px; background: #eee; }
+        .status-open { color: #27ae60; font-weight: bold; }
+        .status-closed { color: #e74c3c; font-weight: bold; }
+        iframe { width: 100%; height: 100%; border: none; }
 
-/* 決定した時のズーム演出 */
-.pop-in {
-    animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes pop-in {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-/* --- ここまで --- */
+        @media (max-width: 600px) {
+            .search-grid { grid-template-columns: 1fr; }
+            button { grid-column: span 1; }
+            .result-layout { flex-direction: column; }
+            .map-panel { height: 250px; }
+        }
+    </style>
 </head>
 <body>
 
@@ -151,63 +160,26 @@ const shops = [
     { name: "タニタカフェ 南池袋店", cat: "ヘルシー", sub: "あっさり", menu: "日替わりヘルシープレート", dist: "遠出", price: 1500, open: 11, close: 20 }
 ];
 // ここまで
-/* --- このカタマリをごっそり入れ替え --- */
-function decideLunch() {
-    const cat = document.getElementById('category').value;
-    const mood = document.getElementById('mood').value;
-    const dist = document.getElementById('distance').value;
-    const budget = document.getElementById('budget').value;
-    
-    let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
+    function decideLunch() {
+        const cat = document.getElementById('category').value;
+        const mood = document.getElementById('mood').value;
+        
+        // 今日の履歴を取得
+        let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
 
-    let filtered = shops.filter(s => {
-        const matchCat = (cat === 'any' || s.cat === cat);
-        const matchMood = (mood === 'any' || s.sub === mood);
-        const matchDist = (dist === 'any' || s.dist === dist);
-        const matchBudget = (budget === 'any' || s.price <= parseInt(budget) || (budget === "2000" && s.price >= 2000));
-        const notVisited = !history.includes(s.name);
-        return matchCat && matchMood && matchDist && matchBudget && notVisited;
-    });
+        // フィルタリング
+        let filtered = shops.filter(s => {
+            const matchCat = (cat === 'any' || s.cat === cat);
+            const matchMood = (mood === 'any' || s.sub === mood);
+            const notVisited = !history.includes(s.name);
+            return matchCat && matchMood && notVisited;
+        });
 
-    if (filtered.length === 0) {
-        filtered = shops.filter(s => (cat === 'any' || s.cat === cat) && (mood === 'any' || s.sub === mood));
-        if(filtered.length > 0) alert("未訪問のお店を一周しました！全リストから抽選します。");
-        else { alert("条件に合うお店がありません！"); return; }
-    }
-
-    // --- ガチャ演出開始 ---
-    const resultContainer = document.getElementById('result-container');
-    const nameDisplay = document.getElementById('result-name');
-    resultContainer.style.display = 'block';
-    
-    // アニメーション用クラスのリセットと追加
-    nameDisplay.classList.remove('pop-in');
-    nameDisplay.classList.add('slot-animation'); 
-    
-    let count = 0;
-    const slotTimer = setInterval(() => {
-        // 全店舗からランダムに名前だけ表示してシャッフル感を出す
-        const randomFake = shops[Math.floor(Math.random() * shops.length)];
-        nameDisplay.innerText = randomFake.name;
-        count++;
-
-        if (count > 15) { // 15回シャッフルしたら終了
-            clearInterval(slotTimer);
-            nameDisplay.classList.remove('slot-animation');
-            
-            // 本当の当選を決定
-            const chosen = filtered[Math.floor(Math.random() * filtered.length)];
-            history.push(chosen.name);
-            sessionStorage.setItem('lunch_history', JSON.stringify(history));
-            
-            // 結果を表示
-            nameDisplay.classList.add('pop-in'); // 決定時のアニメ
-            displayResult(chosen); // 前に作った表示関数を呼び出す
-            updateHistoryCount(history.length);
+        // 履歴で全滅した場合、一度履歴を無視して再検索
+        if (filtered.length === 0) {
+            filtered = shops.filter(s => (cat === 'any' || s.cat === cat) && (mood === 'any' || s.sub === mood));
+            if(filtered.length > 0) alert("今日出た候補を一周しました！再表示します。");
         }
-    }, 80); 
-}
-/* --- 入れ替え完了 --- */
 
         if (filtered.length > 0) {
             const chosen = filtered[Math.floor(Math.random() * filtered.length)];
