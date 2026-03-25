@@ -126,8 +126,8 @@
         { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", min: 1200, max: 2000, open: 11, close: 22 }
     ];
 
-    function decideLunch() {
-        // セレクトボックスの値を取得
+function decideLunch() {
+        // 【重要】まず最初に画面から選択された値を取得する（これが抜けるとエラーになります）
         const cat = document.getElementById('category').value;
         const mood = document.getElementById('mood').value;
         const dist = document.getElementById('distance').value;
@@ -135,7 +135,7 @@
         
         let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
 
-        // 絞り込み実行
+        // その後に絞り込みを行う
         let filtered = shops.filter(s => {
             const matchCat = (cat === 'any' || s.cat === cat);
             const matchMood = (mood === 'any' || s.sub === mood);
@@ -145,12 +145,13 @@
             return matchCat && matchMood && matchDist && matchBudget && notVisited;
         });
 
-        // 該当なしの場合の処理
+        // 該当がない場合の処理
         if (filtered.length === 0) {
             alert("条件に合うお店がありません！履歴をリセットするか、条件を変えてみてください。");
             return;
         }
 
+        // --- 以下、スロット演出 ---
         const nameDisplay = document.getElementById('result-name');
         document.getElementById('result-container').style.display = 'block';
         nameDisplay.classList.remove('pop-in');
