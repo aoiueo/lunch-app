@@ -131,21 +131,16 @@ const shops = [
 ];
 
     function decideLunch() {
-        const cat = document.getElementById('category').value;
-        const mood = document.getElementById('mood').value;
-        const dist = document.getElementById('distance').value;
-        const budget = document.getElementById('budget').value;
-        
-        let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
-
-        let filtered = shops.filter(s => {
-            const matchCat = (cat === 'any' || s.cat === cat);
-            const matchMood = (mood === 'any' || s.sub === mood);
-            const matchDist = (dist === 'any' || s.dist === dist);
-            const matchBudget = (budget === 'any' || s.price <= parseInt(budget) || (budget === "2000" && s.price >= 2000));
-            const notVisited = !history.includes(s.name);
-            return matchCat && matchMood && matchDist && matchBudget && notVisited;
-        });
+       // 修正後（decideLunch関数の中）
+let filtered = shops.filter(s => {
+    const matchCat = (cat === 'any' || s.cat === cat);
+    const matchMood = (mood === 'any' || s.sub === mood);
+    const matchDist = (dist === 'any' || s.dist === dist);
+    // ↓ ここを書き換え：最低価格(min)が予算以下かどうか
+    const matchBudget = (budget === 'any' || s.min <= parseInt(budget));
+    const notVisited = !history.includes(s.name);
+    return matchCat && matchMood && matchDist && matchBudget && notVisited;
+});
 
         if (filtered.length === 0) {
             filtered = shops.filter(s => (cat === 'any' || s.cat === cat) && (mood === 'any' || s.sub === mood));
