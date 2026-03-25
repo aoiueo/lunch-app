@@ -16,7 +16,6 @@
         button { background: var(--main); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; grid-column: span 2; }
         button:hover { background: var(--accent); }
 
-        /* ガチャ演出 */
         .slot-animation { animation: slot-blur 0.1s infinite; opacity: 0.7; color: #95a5a6 !important; }
         @keyframes slot-blur { 
             0% { transform: translateY(-2px); filter: blur(1px); }
@@ -128,7 +127,7 @@
     ];
 
     function decideLunch() {
-        // 【重要】画面から選択した値を取得
+        // セレクトボックスの値を取得
         const cat = document.getElementById('category').value;
         const mood = document.getElementById('mood').value;
         const dist = document.getElementById('distance').value;
@@ -136,7 +135,7 @@
         
         let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
 
-        // 【重要】絞り込み条件の修正
+        // 絞り込み実行
         let filtered = shops.filter(s => {
             const matchCat = (cat === 'any' || s.cat === cat);
             const matchMood = (mood === 'any' || s.sub === mood);
@@ -146,6 +145,7 @@
             return matchCat && matchMood && matchDist && matchBudget && notVisited;
         });
 
+        // 該当なしの場合の処理
         if (filtered.length === 0) {
             alert("条件に合うお店がありません！履歴をリセットするか、条件を変えてみてください。");
             return;
@@ -211,7 +211,7 @@
         document.getElementById('history-info').innerText = `本日チェックした件数: ${count}件`;
     }
 
-    // 初期化
+    // 初回読み込み時の履歴表示
     updateHistoryCount(JSON.parse(sessionStorage.getItem('lunch_history') || "[]").length);
 </script>
 
