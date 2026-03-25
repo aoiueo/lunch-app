@@ -16,6 +16,7 @@
         button { background: var(--main); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; grid-column: span 2; }
         button:hover { background: var(--accent); }
 
+        /* ガチャ演出 */
         .slot-animation { animation: slot-blur 0.1s infinite; opacity: 0.7; color: #95a5a6 !important; }
         @keyframes slot-blur { 
             0% { transform: translateY(-2px); filter: blur(1px); }
@@ -31,6 +32,7 @@
         .map-panel { flex: 1; min-width: 300px; height: 350px; border-radius: 15px; overflow: hidden; border: 1px solid #eee; }
         
         .shop-name { font-size: 1.8rem; font-weight: bold; color: var(--accent); margin-bottom: 10px; }
+        .budget-icon { display: inline-block; background: #2f3542; color: white; padding: 2px 10px; border-radius: 8px; font-size: 0.9rem; margin-left: 10px; vertical-align: middle; }
         .recommend-box { background: #fff9f0; border-left: 5px solid var(--main); padding: 10px 15px; margin: 15px 0; }
         .tag { display: inline-block; padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; margin-right: 5px; background: #eee; }
         .status-open { color: #27ae60; font-weight: bold; }
@@ -103,7 +105,7 @@
                     <div id="recommend-menu" style="font-size: 1.1rem; margin-top: 5px;"></div>
                 </div>
                 <div id="result-time" style="font-size: 0.9rem; color: #666;"></div>
-                <button onclick="resetHistory()" style="background:#999; margin-top:20px; padding:8px; font-size: 0.7rem; width: auto;">履歴をリセット</button>
+                <button onclick="resetHistory()" style="background:#999; margin-top:20px; padding:8px; font-size: 0.7rem; width: auto; grid-column: auto;">履歴をリセット</button>
             </div>
             <div class="map-panel" id="map-area"></div>
         </div>
@@ -111,104 +113,107 @@
 </div>
 
 <script>
-const shops = [
-    { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", min: 900, max: 1100, open: 11, close: 22 },
-    { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
-    { name: "しんぱち食堂 西池袋店", cat: "定食", sub: "あっさり", menu: "サーモンハラス干し定食", dist: "近場", min: 700, max: 1000, open: 7, close: 23 },
-    { name: "蒙古タンメン中本 池袋店", cat: "ラーメン", sub: "がっつり", menu: "蒙古タンメン", dist: "近場", min: 800, max: 1200, open: 11, close: 24 },
-    { name: "鶏そば 壽", cat: "ラーメン", sub: "あっさり", menu: "レモン鶏そば", dist: "近場", min: 900, max: 1300, open: 11, close: 23 },
-    { name: "牛かつ もと村 池袋店", cat: "定食", sub: "がっつり", menu: "牛かつ定食", dist: "遠出", min: 1600, max: 2500, open: 11, close: 22 },
-    { name: "銀座 篝 池袋店", cat: "ラーメン", sub: "あっさり", menu: "鶏白湯そば", dist: "遠出", min: 1200, max: 1800, open: 11, close: 22 },
-    { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", min: 800, max: 1200, open: 11, close: 23 },
-    { name: "小諸そば 池袋店", cat: "クイック", sub: "あっさり", menu: "二枚もり", dist: "近場", min: 400, max: 800, open: 7, close: 21 },
-    { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", min: 1200, max: 2000, open: 11, close: 22 }
-];
+    // データベース
+    const shops = [
+        { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", min: 900, max: 1100, open: 11, close: 22 },
+        { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
+        { name: "しんぱち食堂 西池袋店", cat: "定食", sub: "あっさり", menu: "サーモンハラス干し定食", dist: "近場", min: 700, max: 1000, open: 7, close: 23 },
+        { name: "蒙古タンメン中本 池袋店", cat: "ラーメン", sub: "がっつり", menu: "蒙古タンメン", dist: "近場", min: 800, max: 1200, open: 11, close: 24 },
+        { name: "鶏そば 壽", cat: "ラーメン", sub: "あっさり", menu: "レモン鶏そば", dist: "近場", min: 900, max: 1300, open: 11, close: 23 },
+        { name: "牛かつ もと村 池袋店", cat: "定食", sub: "がっつり", menu: "牛かつ定食", dist: "遠出", min: 1600, max: 2500, open: 11, close: 22 },
+        { name: "銀座 篝 池袋店", cat: "ラーメン", sub: "あっさり", menu: "鶏白湯そば", dist: "遠出", min: 1200, max: 1800, open: 11, close: 22 },
+        { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", min: 800, max: 1200, open: 11, close: 23 },
+        { name: "小諸そば 池袋店", cat: "クイック", sub: "あっさり", menu: "二枚もり", dist: "近場", min: 400, max: 800, open: 7, close: 21 },
+        { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", min: 1200, max: 2000, open: 11, close: 22 }
+    ];
 
-function decideLunch() {
-    // 【修正箇所】各セレクトボックスから値を取得するコードを復活
-    const cat = document.getElementById('category').value;
-    const mood = document.getElementById('mood').value;
-    const dist = document.getElementById('distance').value;
-    const budget = document.getElementById('budget').value;
-    
-    let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
+    function decideLunch() {
+        // 【重要】画面から選択した値を取得
+        const cat = document.getElementById('category').value;
+        const mood = document.getElementById('mood').value;
+        const dist = document.getElementById('distance').value;
+        const budget = document.getElementById('budget').value;
+        
+        let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
 
-    // 【修正箇所】フィルタ条件。minが予算以下ならヒット
-    let filtered = shops.filter(s => {
-        const matchCat = (cat === 'any' || s.cat === cat);
-        const matchMood = (mood === 'any' || s.sub === mood);
-        const matchDist = (dist === 'any' || s.dist === dist);
-        const matchBudget = (budget === 'any' || s.min <= parseInt(budget));
-        const notVisited = !history.includes(s.name);
-        return matchCat && matchMood && matchDist && matchBudget && notVisited;
-    });
+        // 【重要】絞り込み条件の修正
+        let filtered = shops.filter(s => {
+            const matchCat = (cat === 'any' || s.cat === cat);
+            const matchMood = (mood === 'any' || s.sub === mood);
+            const matchDist = (dist === 'any' || s.dist === dist);
+            const matchBudget = (budget === 'any' || s.min <= parseInt(budget));
+            const notVisited = !history.includes(s.name);
+            return matchCat && matchMood && matchDist && matchBudget && notVisited;
+        });
 
-    if (filtered.length === 0) {
-        alert("条件に合うお店がありません！条件を緩めるか履歴をリセットしてください。");
-        return;
+        if (filtered.length === 0) {
+            alert("条件に合うお店がありません！履歴をリセットするか、条件を変えてみてください。");
+            return;
+        }
+
+        const nameDisplay = document.getElementById('result-name');
+        document.getElementById('result-container').style.display = 'block';
+        nameDisplay.classList.remove('pop-in');
+        nameDisplay.classList.add('slot-animation'); 
+        
+        let count = 0;
+        const slotTimer = setInterval(() => {
+            const randomFake = shops[Math.floor(Math.random() * shops.length)];
+            nameDisplay.innerText = randomFake.name;
+            count++;
+
+            if (count > 15) {
+                clearInterval(slotTimer);
+                nameDisplay.classList.remove('slot-animation');
+                const chosen = filtered[Math.floor(Math.random() * filtered.length)];
+                history.push(chosen.name);
+                sessionStorage.setItem('lunch_history', JSON.stringify(history));
+                nameDisplay.classList.add('pop-in');
+                displayResult(chosen);
+                updateHistoryCount(history.length);
+            }
+        }, 80);
     }
 
-    const nameDisplay = document.getElementById('result-name');
-    document.getElementById('result-container').style.display = 'block';
-    nameDisplay.classList.remove('pop-in');
-    nameDisplay.classList.add('slot-animation'); 
-    
-    let count = 0;
-    const slotTimer = setInterval(() => {
-        const randomFake = shops[Math.floor(Math.random() * shops.length)];
-        nameDisplay.innerText = randomFake.name;
-        count++;
+    function displayResult(shop) {
+        const priceText = `${shop.min.toLocaleString()}円 〜 ${shop.max.toLocaleString()}円`;
+        
+        document.getElementById('result-name').innerHTML = 
+            `${shop.name} <span class="budget-icon">${priceText}</span>`;
+        
+        document.getElementById('recommend-menu').innerText = shop.menu;
+        
+        const hour = new Date().getHours();
+        const isOpen = (hour >= shop.open && hour < shop.close);
+        document.getElementById('status').innerHTML = isOpen ? 
+            '<span class="status-open">● 営業中</span>' : 
+            '<span class="status-closed">○ 営業時間外かも</span>';
+        
+        document.getElementById('tags').innerHTML = 
+            `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
+        
+        document.getElementById('result-time').innerHTML = 
+            `予算目安: <strong>${priceText}</strong><br>営業時間目安: ${shop.open}:00 〜 ${shop.close}:00`;
 
-        if (count > 15) {
-            clearInterval(slotTimer);
-            nameDisplay.classList.remove('slot-animation');
-            const chosen = filtered[Math.floor(Math.random() * filtered.length)];
-            history.push(chosen.name);
-            sessionStorage.setItem('lunch_history', JSON.stringify(history));
-            nameDisplay.classList.add('pop-in');
-            displayResult(chosen);
-            updateHistoryCount(history.length);
-        }
-    }, 80);
-}
+        const q = encodeURIComponent(shop.name + " 池袋");
+        document.getElementById('map-area').innerHTML = 
+            `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
+        
+        window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
+    }
 
-function displayResult(shop) {
-    const priceText = `${shop.min.toLocaleString()}円 〜 ${shop.max.toLocaleString()}円`;
-    
-    document.getElementById('result-name').innerHTML = 
-        `${shop.name} <span class="budget-icon" style="background:#2f3542; color:white; padding:2px 10px; border-radius:8px; font-size:0.9rem; margin-left:10px; vertical-align:middle; display:inline-block;">${priceText}</span>`;
-    
-    document.getElementById('recommend-menu').innerText = shop.menu;
-    
-    const hour = new Date().getHours();
-    const isOpen = (hour >= shop.open && hour < shop.close);
-    document.getElementById('status').innerHTML = isOpen ? 
-        '<span class="status-open">● 営業中</span>' : 
-        '<span class="status-closed">○ 営業時間外かも</span>';
-    
-    document.getElementById('tags').innerHTML = 
-        `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
-    
-    document.getElementById('result-time').innerHTML = 
-        `予算目安: <strong>${priceText}</strong><br>営業時間目安: ${shop.open}:00 〜 ${shop.close}:00`;
+    function resetHistory() {
+        sessionStorage.removeItem('lunch_history');
+        location.reload();
+    }
 
-    const q = encodeURIComponent(shop.name + " 池袋");
-    document.getElementById('map-area').innerHTML = 
-        `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
-    
-    window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
-}
+    function updateHistoryCount(count) {
+        document.getElementById('history-info').innerText = `本日チェックした件数: ${count}件`;
+    }
 
-function resetHistory() {
-    sessionStorage.removeItem('lunch_history');
-    location.reload();
-}
-
-function updateHistoryCount(count) {
-    document.getElementById('history-info').innerText = `本日チェックした件数: ${count}件`;
-}
-
-updateHistoryCount(JSON.parse(sessionStorage.getItem('lunch_history') || "[]").length);
+    // 初期化
+    updateHistoryCount(JSON.parse(sessionStorage.getItem('lunch_history') || "[]").length);
 </script>
+
 </body>
 </html>
