@@ -177,21 +177,42 @@
         }, 80);
     }
 
-    function displayResult(shop) {
-        let yenMark = (shop.price <= 1000) ? "￥" : (shop.price <= 1500) ? "￥￥" : "￥￥￥";
-        document.getElementById('result-name').innerHTML = `${shop.name} <span class="budget-icon">${yenMark}</span>`;
-        document.getElementById('recommend-menu').innerText = shop.menu;
-        
-        const hour = new Date().getHours();
-        const isOpen = (hour >= shop.open && hour < shop.close);
-        document.getElementById('status').innerHTML = isOpen ? '<span class="status-open">● 営業中</span>' : '<span class="status-closed">○ 営業時間外かも</span>';
-        document.getElementById('tags').innerHTML = `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
-        document.getElementById('result-time').innerText = `目安: ${shop.open}:00〜${shop.close}:00`;
+/* ↓ これを貼り付けます */
+function displayResult(shop) {
+    // 予算の数値を具体的なテキストに変換
+    let priceText = "";
+    if (shop.price <= 1000) priceText = "〜1,000円";
+    else if (shop.price <= 1500) priceText = "1,001〜1,500円";
+    else priceText = "2,000円〜";
 
-        const q = encodeURIComponent(shop.name + " 池袋");
-        document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
-        window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
-    }
+    // 店名と具体的な金額バッジを表示
+    document.getElementById('result-name').innerHTML = 
+        `${shop.name} <span class="budget-icon">${priceText}</span>`;
+    
+    document.getElementById('recommend-menu').innerText = shop.menu;
+    
+    // 営業判定
+    const hour = new Date().getHours();
+    const isOpen = (hour >= shop.open && hour < shop.close);
+    document.getElementById('status').innerHTML = isOpen ? 
+        '<span class="status-open">● 営業中</span>' : 
+        '<span class="status-closed">○ 営業時間外かも</span>';
+    
+    // タグの表示
+    document.getElementById('tags').innerHTML = 
+        `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
+    
+    // 詳細情報に予算と営業時間を表示
+    document.getElementById('result-time').innerHTML = 
+        `予算目安: <strong>${priceText}</strong><br>営業時間目安: ${shop.open}:00 〜 ${shop.close}:00`;
+
+    // マップ表示
+    const q = encodeURIComponent(shop.name + " 池袋");
+    document.getElementById('map-area').innerHTML = 
+        `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
+    
+    window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
+}
 
     function resetHistory() {
         sessionStorage.removeItem('lunch_history');
