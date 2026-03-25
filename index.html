@@ -115,19 +115,18 @@
 </div>
 
 <script>
-    // データベース（代表的なお店をリスト化）
+    // 1. データベース：priceをminとmaxに分割
     const shops = [
-        { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", price: 1000, open: 11, close: 22 },
-        { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", price: 1000, open: 11, close: 22 },
-        { name: "しんぱち食堂 西池袋店", cat: "定食", sub: "あっさり", menu: "サーモンハラス干し定食", dist: "近場", price: 1000, open: 7, close: 23 },
-        { name: "蒙古タンメン中本 池袋店", cat: "ラーメン", sub: "がっつり", menu: "蒙古タンメン", dist: "近場", price: 1000, open: 11, close: 24 },
-        { name: "鶏そば 壽", cat: "ラーメン", sub: "あっさり", menu: "レモン鶏そば", dist: "近場", price: 1000, open: 11, close: 23 },
-        { name: "牛かつ もと村 池袋店", cat: "定食", sub: "がっつり", menu: "牛かつ定食", dist: "遠出", price: 2000, open: 11, close: 22 },
-        { name: "銀座 篝 池袋店", cat: "ラーメン", sub: "あっさり", menu: "鶏白湯そば", dist: "遠出", price: 1500, open: 11, close: 22 },
-        { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", price: 1000, open: 11, close: 23 },
-        { name: "小諸そば 池袋店", cat: "クイック", sub: "あっさり", menu: "二枚もり", dist: "近場", price: 1000, open: 7, close: 21 },
-        { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", price: 1500, open: 11, close: 22 }
-        // ※同様の形式で100店舗まで増やせます
+        { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", min: 900, max: 1100, open: 11, close: 22 },
+        { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
+        { name: "しんぱち食堂 西池袋店", cat: "定食", sub: "あっさり", menu: "サーモンハラス干し定食", dist: "近場", min: 700, max: 1000, open: 7, close: 23 },
+        { name: "蒙古タンメン中本 池袋店", cat: "ラーメン", sub: "がっつり", menu: "蒙古タンメン", dist: "近場", min: 850, max: 1200, open: 11, close: 24 },
+        { name: "鶏そば 壽", cat: "ラーメン", sub: "あっさり", menu: "レモン鶏そば", dist: "近場", min: 900, max: 1300, open: 11, close: 23 },
+        { name: "牛かつ もと村 池袋店", cat: "定食", sub: "がっつり", menu: "牛かつ定食", dist: "遠出", min: 1600, max: 2500, open: 11, close: 22 },
+        { name: "銀座 篝 池袋店", cat: "ラーメン", sub: "あっさり", menu: "鶏白湯そば", dist: "遠出", min: 1200, max: 1800, open: 11, close: 22 },
+        { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", min: 800, max: 1200, open: 11, close: 23 },
+        { name: "小諸そば 池袋店", cat: "クイック", sub: "あっさり", menu: "二枚もり", dist: "近場", min: 400, max: 700, open: 7, close: 21 },
+        { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", min: 1200, max: 2200, open: 11, close: 22 }
     ];
 
     function decideLunch() {
@@ -138,11 +137,13 @@
         
         let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
 
+        // 2. 検索ロジック：min価格で判定するように修正
         let filtered = shops.filter(s => {
             const matchCat = (cat === 'any' || s.cat === cat);
             const matchMood = (mood === 'any' || s.sub === mood);
             const matchDist = (dist === 'any' || s.dist === dist);
-            const matchBudget = (budget === 'any' || s.price <= parseInt(budget) || (budget === "2000" && s.price >= 2000));
+            // 予算の判定（s.price を s.min に変更）
+            const matchBudget = (budget === 'any' || s.min <= parseInt(budget) || (budget === "2000" && s.min >= 2000));
             const notVisited = !history.includes(s.name);
             return matchCat && matchMood && matchDist && matchBudget && notVisited;
         });
@@ -177,9 +178,14 @@
         }, 80);
     }
 
+    // 3. 表示部分：円マーク計算を廃止し、min〜max表示へ
     function displayResult(shop) {
-        let yenMark = (shop.price <= 1000) ? "￥" : (shop.price <= 1500) ? "￥￥" : "￥￥￥";
-        document.getElementById('result-name').innerHTML = `${shop.name} <span class="budget-icon">${yenMark}</span>`;
+        // 価格表示を「800円〜1,100円」の形式に整形
+        const priceRange = `${shop.min.toLocaleString()}円〜${shop.max.toLocaleString()}円`;
+        
+        document.getElementById('result-name').innerHTML = 
+            `${shop.name} <span class="budget-icon" style="background:#2f3542; color:white;">${priceRange}</span>`;
+        
         document.getElementById('recommend-menu').innerText = shop.menu;
         
         const hour = new Date().getHours();
