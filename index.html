@@ -180,15 +180,12 @@
 
 /* ↓ これを貼り付けます */
 function displayResult(shop) {
-    // 予算の数値を具体的なテキストに変換
-    let priceText = "";
-    if (shop.price <= 1000) priceText = "〜1,000円";
-    else if (shop.price <= 1500) priceText = "1,001〜1,500円";
-    else priceText = "2,000円〜";
+    // 修正ポイント：minとmaxを組み合わせて「〇〇円〜〇〇円」という文字列を作る
+    const priceText = `${shop.min.toLocaleString()}円〜${shop.max.toLocaleString()}円`;
 
     // 店名と具体的な金額バッジを表示
     document.getElementById('result-name').innerHTML = 
-        `${shop.name} <span class="budget-icon">${priceText}</span>`;
+        `${shop.name} <span class="budget-icon" style="padding: 2px 8px; background: #2f3542; color: white; border-radius: 8px; font-size: 0.9rem; margin-left: 10px; vertical-align: middle;">${priceText}</span>`;
     
     document.getElementById('recommend-menu').innerText = shop.menu;
     
@@ -214,7 +211,6 @@ function displayResult(shop) {
     
     window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
 }
-
     function resetHistory() {
         sessionStorage.removeItem('lunch_history');
         location.reload();
