@@ -77,50 +77,44 @@
 
     <script>
       // お店のデータベース（ここを自由に編集してください）
-      const shops = [
-        {
-          name: "近所のガッツリ家系ラーメン",
-          type: "麺",
-          distance: "近場",
-          mood: "ガッツリ",
-        },
-        {
-          name: "駅前の立ち食いそば",
-          type: "麺",
-          distance: "近場",
-          mood: "あっさり",
-        },
-        {
-          name: "タクシーで行く伝説のつけ麺",
-          type: "麺",
-          distance: "遠出",
-          mood: "ガッツリ",
-        },
-        {
-          name: "商店街の定食屋さん",
-          type: "米",
-          distance: "近場",
-          mood: "ガッツリ",
-        },
-        {
-          name: "ヘルシーおにぎり専門店",
-          type: "米",
-          distance: "近場",
-          mood: "あっさり",
-        },
-        {
-          name: "隣町の特大ハンバーガー",
-          type: "パン",
-          distance: "遠出",
-          mood: "ガッツリ",
-        },
-        {
-          name: "公園近くのサンドイッチ屋",
-          type: "パン",
-          distance: "近場",
-          mood: "あっさり",
-        },
-      ];
+     // 池袋1丁目1-7周辺の充実したお店データ（約30店）
+    const shops = [
+        // --- 麺類 (10店) ---
+        { name: "鶏そば 壽（ことぶき）", type: "麺", distance: "近場", mood: "あっさり" },
+        { name: "蒙古タンメン中本 池袋店", type: "麺", distance: "近場", mood: "ガッツリ" },
+        { name: "麺屋武蔵 二天", type: "麺", distance: "近場", mood: "ガッツリ" },
+        { name: "屯ちん 池袋本店", type: "麺", distance: "遠出", mood: "ガッツリ" },
+        { name: "らーめん はやし田 池袋店", type: "麺", distance: "遠出", mood: "あっさり" },
+        { name: "うどん 慎（西口・北口周辺のうどん屋）", type: "麺", distance: "近場", mood: "あっさり" },
+        { name: "六坊担担面", type: "麺", distance: "遠出", mood: "ガッツリ" },
+        { name: "銀座 篝 池袋店（鶏白湯）", type: "麺", distance: "遠出", mood: "あっさり" },
+        { name: "油そば 鈴の木", type: "麺", distance: "近場", mood: "ガッツリ" },
+        { name: "小諸そば 池袋店", type: "麺", distance: "近場", mood: "あっさり" },
+
+        // --- 米（定食・丼・カレー） (12店) ---
+        { name: "キッチンABC 西池袋店", type: "米", distance: "近場", mood: "ガッツリ" },
+        { name: "しんぱち食堂 西池袋店", type: "米", distance: "近場", mood: "あっさり" },
+        { name: "牛かつ もと村 池袋店", type: "米", distance: "遠出", mood: "ガッツリ" },
+        { name: "大戸屋 ごはん処 池袋西口店", type: "米", distance: "近場", mood: "あっさり" },
+        { name: "洋庖丁（よほうちょう）池袋店", type: "米", distance: "近場", mood: "ガッツリ" },
+        { name: "カレーは飲み物。池袋店", type: "米", distance: "遠出", mood: "ガッツリ" },
+        { name: "宮崎県日向市 じとっこ組合（ランチ定食）", type: "米", distance: "近場", mood: "ガッツリ" },
+        { name: "おにぎり ぼんご（大塚方面だが池袋からも！）", type: "米", distance: "遠出", mood: "あっさり" },
+        { name: "伝説のすた丼屋 池袋店", type: "米", distance: "近場", mood: "ガッツリ" },
+        { name: "丸亀製麺 池袋店", type: "米", distance: "遠出", mood: "あっさり" },
+        { name: "火星カレー", type: "米", distance: "遠出", mood: "ガッツリ" },
+        { name: "ねぎし 池袋駅西口店", type: "米", distance: "近場", mood: "あっさり" },
+
+        // --- パン（バーガー・サンドイッチ・カフェ） (8店) ---
+        { name: "バーガーキング 池袋立教通り店", type: "パン", distance: "近場", mood: "ガッツリ" },
+        { name: "メゾン・カイザー 池袋サンシャイン店", type: "パン", distance: "遠出", mood: "あっさり" },
+        { name: "J.S. BURGERS CAFE 池袋店", type: "パン", distance: "遠出", mood: "ガッツリ" },
+        { name: "タカセ 池袋本店（パン・軽食）", type: "パン", distance: "遠出", mood: "あっさり" },
+        { name: "ウェンディーズ・ファーストキッチン 池袋北口店", type: "パン", distance: "近場", mood: "ガッツリ" },
+        { name: "サンマルクカフェ 池袋メトロポリタン口店", type: "パン", distance: "遠出", mood: "あっさり" },
+        { name: "フレッシュネスバーガー 池袋西口店", type: "パン", distance: "近場", mood: "ガッツリ" },
+        { name: "コメダ珈琲店 西武池袋前店", type: "パン", distance: "遠出", mood: "ガッツリ" }
+    ];
 
       function decideLunch() {
         const type = document.getElementById("type").value;
