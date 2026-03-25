@@ -116,19 +116,19 @@
 
 <script>
     // データベース（代表的なお店をリスト化）
-    const shops = [
-        { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", price: 1000, open: 11, close: 22 },
-        { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", price: 1000, open: 11, close: 22 },
-        { name: "しんぱち食堂 西池袋店", cat: "定食", sub: "あっさり", menu: "サーモンハラス干し定食", dist: "近場", price: 1000, open: 7, close: 23 },
-        { name: "蒙古タンメン中本 池袋店", cat: "ラーメン", sub: "がっつり", menu: "蒙古タンメン", dist: "近場", price: 1000, open: 11, close: 24 },
-        { name: "鶏そば 壽", cat: "ラーメン", sub: "あっさり", menu: "レモン鶏そば", dist: "近場", price: 1000, open: 11, close: 23 },
-        { name: "牛かつ もと村 池袋店", cat: "定食", sub: "がっつり", menu: "牛かつ定食", dist: "遠出", price: 2000, open: 11, close: 22 },
-        { name: "銀座 篝 池袋店", cat: "ラーメン", sub: "あっさり", menu: "鶏白湯そば", dist: "遠出", price: 1500, open: 11, close: 22 },
-        { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", price: 1000, open: 11, close: 23 },
-        { name: "小諸そば 池袋店", cat: "クイック", sub: "あっさり", menu: "二枚もり", dist: "近場", price: 1000, open: 7, close: 21 },
-        { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", price: 1500, open: 11, close: 22 }
-        // ※同様の形式で100店舗まで増やせます
-    ];
+// 修正後：price ではなく min と max を入れる
+const shops = [
+    { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", min: 900, max: 1100, open: 11, close: 22 },
+    { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
+    { name: "しんぱち食堂 西池袋店", cat: "定食", sub: "あっさり", menu: "サーモンハラス干し定食", dist: "近場", min: 700, max: 1000, open: 7, close: 23 },
+    { name: "蒙古タンメン中本 池袋店", cat: "ラーメン", sub: "がっつり", menu: "蒙古タンメン", dist: "近場", min: 800, max: 1200, open: 11, close: 24 },
+    { name: "鶏そば 壽", cat: "ラーメン", sub: "あっさり", menu: "レモン鶏そば", dist: "近場", min: 900, max: 1300, open: 11, close: 23 },
+    { name: "牛かつ もと村 池袋店", cat: "定食", sub: "がっつり", menu: "牛かつ定食", dist: "遠出", min: 1600, max: 2500, open: 11, close: 22 },
+    { name: "銀座 篝 池袋店", cat: "ラーメン", sub: "あっさり", menu: "鶏白湯そば", dist: "遠出", min: 1200, max: 1800, open: 11, close: 22 },
+    { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", min: 800, max: 1200, open: 11, close: 23 },
+    { name: "小諸そば 池袋店", cat: "クイック", sub: "あっさり", menu: "二枚もり", dist: "近場", min: 400, max: 800, open: 7, close: 21 },
+    { name: "タカセ 池袋本店", cat: "カフェ", sub: "あっさり", menu: "ハンバーグランチ", dist: "遠出", min: 1200, max: 2000, open: 11, close: 22 }
+];
 
     function decideLunch() {
         const cat = document.getElementById('category').value;
