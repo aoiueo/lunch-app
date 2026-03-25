@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>今日のお昼、どこ行く？</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        padding: 20px;
+        background: #fdf6e3;
+      }
+      .card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: auto;
+      }
+      select,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+      }
+      button {
+        background: #ff7f50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      button:hover {
+        background: #ff6347;
+      }
+      #result {
+        margin-top: 20px;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #d35400;
+        min-height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>🍴 ランチ決定くん</h2>
+
+      <label>何系？</label>
+      <select id="type">
+        <option value="米">米</option>
+        <option value="パン">パン</option>
+        <option value="麺">麺</option>
+      </select>
+
+      <label>距離は？</label>
+      <select id="distance">
+        <option value="近場">近場でサクッと</option>
+        <option value="遠出">遠くまで行ける</option>
+      </select>
+
+      <label>気分は？</label>
+      <select id="mood">
+        <option value="ガッツリ">ガッツリ</option>
+        <option value="あっさり">あっさり</option>
+      </select>
+
+      <button onclick="decideLunch()">運命の1店を決める！</button>
+
+      <div id="result"></div>
+    </div>
+
+    <script>
+      // お店のデータベース（ここを自由に編集してください）
+      const shops = [
+        {
+          name: "近所のガッツリ家系ラーメン",
+          type: "麺",
+          distance: "近場",
+          mood: "ガッツリ",
+        },
+        {
+          name: "駅前の立ち食いそば",
+          type: "麺",
+          distance: "近場",
+          mood: "あっさり",
+        },
+        {
+          name: "タクシーで行く伝説のつけ麺",
+          type: "麺",
+          distance: "遠出",
+          mood: "ガッツリ",
+        },
+        {
+          name: "商店街の定食屋さん",
+          type: "米",
+          distance: "近場",
+          mood: "ガッツリ",
+        },
+        {
+          name: "ヘルシーおにぎり専門店",
+          type: "米",
+          distance: "近場",
+          mood: "あっさり",
+        },
+        {
+          name: "隣町の特大ハンバーガー",
+          type: "パン",
+          distance: "遠出",
+          mood: "ガッツリ",
+        },
+        {
+          name: "公園近くのサンドイッチ屋",
+          type: "パン",
+          distance: "近場",
+          mood: "あっさり",
+        },
+      ];
+
+      function decideLunch() {
+        const type = document.getElementById("type").value;
+        const distance = document.getElementById("distance").value;
+        const mood = document.getElementById("mood").value;
+
+        // 条件に合うお店を絞り込む
+        const filteredShops = shops.filter(
+          (shop) =>
+            shop.type === type &&
+            shop.distance === distance &&
+            shop.mood === mood,
+        );
+
+        const resultDiv = document.getElementById("result");
+
+        if (filteredShops.length > 0) {
+          // ランダムに1件選ぶ
+          const chosen =
+            filteredShops[Math.floor(Math.random() * filteredShops.length)];
+          resultDiv.innerHTML = `今日のご飯は...<br>「${chosen.name}」です！`;
+        } else {
+          resultDiv.innerHTML = "条件に合うお店が見つかりませんでした...😂";
+        }
+      }
+    </script>
+  </body>
+</html>
