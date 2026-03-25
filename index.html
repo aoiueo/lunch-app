@@ -116,37 +116,38 @@
 
 <script>
     // 1. データベース：priceをminとmaxに分割
-    const shops = [
-    { name: "竈門ご飯一穀 池袋西口店", cat: "定食", sub: "あっさり", menu: "一穀定食", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
-    { name: "ナポリの下町食堂池袋店", cat: "イタリアン", sub: "あっさり", menu: "サラダ付きパスタランチ", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
-    { name: "イケチカ ダイニング", cat: "定食", sub: "あっさり", menu: "蕎麦とおつまみセット", dist: "近場", min: 1000, max: 2000, open: 11, close: 23 },
-    { name: "湘聚・湖南菜館", cat: "中華", sub: "がっつり", menu: "本場の中華料理", dist: "近場", min: 1500, max: 3000, open: 11, close: 23 },
-    { name: "金のイタリアン", cat: "イタリアン", sub: "あっさり", menu: "洗練されたパスタランチ", dist: "遠出", min: 1000, max: 2500, open: 11, close: 22 },
-    { name: "ランチハウス ミトヤ", cat: "定食", sub: "がっつり", menu: "とんかつ定食", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
-    { name: "楽楽屋 池袋本店", cat: "中華", sub: "がっつり", menu: "選べる中華ランチ", dist: "近場", min: 800, max: 1500, open: 11, close: 23 },
-    { name: "ブラッスリー レトン", cat: "フランス料理", sub: "あっさり", menu: "コースランチ", dist: "近場", min: 2000, max: 4000, open: 11, close: 21 },
-    { name: "北海道イタリアンミアボッカ", cat: "イタリアン", sub: "あっさり", menu: "北海道食材パスタ", dist: "近場", min: 2000, max: 3000, open: 11, close: 22 },
-    { name: "あんぷく池袋店", cat: "うどん", sub: "あっさり", menu: "名物カルボナーラうどん", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
-    { name: "大かまど飯 寅福", cat: "定食", sub: "あっさり", menu: "大かまど飯定食", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
-    { name: "トロ政 池袋店", cat: "和食", sub: "がっつり", menu: "海鮮丼ランチ", dist: "近場", min: 1000, max: 2500, open: 11, close: 22 },
-    { name: "沖縄食堂 やんばる池袋店", cat: "和食", sub: "あっさり", menu: "ソーキそば", dist: "遠出", min: 800, max: 1200, open: 11, close: 23 },
-    { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", min: 800, max: 1000, open: 11, close: 21 },
-    { name: "TOMBOY 池袋東口店", cat: "カレー", sub: "がっつり", menu: "本格インドカレー", dist: "遠出", min: 1000, max: 2000, open: 11, close: 23 },
-    { name: "爽亭 JR池袋駅店", cat: "クイック", sub: "あっさり", menu: "かき揚げそば", dist: "近場", min: 400, max: 800, open: 7, close: 23 },
-    { name: "みなと", cat: "和食", sub: "がっつり", menu: "ガッツリ海鮮丼", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
-    { name: "びすとろ UOKIN 池袋", cat: "ビストロ", sub: "あっさり", menu: "魚金の洋食ランチ", dist: "近場", min: 1200, max: 2500, open: 11, close: 23 },
-    { name: "一心", cat: "定食", sub: "がっつり", menu: "チーズメンチカツ定食", dist: "近場", min: 800, max: 1000, open: 11, close: 21 },
-    { name: "かえる食堂", cat: "カレー", sub: "がっつり", menu: "手作りカレー", dist: "遠出", min: 900, max: 1200, open: 11, close: 15 }
-    { name: "ハナオカフェ 池袋パルコ店", cat: "カフェ", sub: "あっさり", menu: "ハワイアンライスボウル", dist: "近場", min: 1000, max: 2000, open: 11, close: 23 },
-    { name: "Teishoku 美松", cat: "定食", sub: "あっさり", menu: "銀ダラみそ焼定食", dist: "近場", min: 2000, max: 3000, open: 11, close: 15 },
-    { name: "祥龍房 池袋店", cat: "中華", sub: "がっつり", menu: "鉄板アツアツ中華", dist: "近場", min: 800, max: 1000, open: 11, close: 24 },
-    { name: "Collabo_Index 池袋PARCO店", cat: "洋食", sub: "あっさり", menu: "日替わりランチ", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
-    { name: "POLLO PORRO 東武池袋店", cat: "イタリアン", sub: "あっさり", menu: "パスタセット", dist: "近場", min: 2000, max: 3000, open: 11, close: 22 },
-    { name: "池袋大人のハンバーグ", cat: "洋食", sub: "がっつり", menu: "大人のハンバーグ", dist: "遠出", min: 1000, max: 2000, open: 11, close: 16 },
-    { name: "キッチン YAMITUKI", cat: "洋食", sub: "がっつり", menu: "明太子スパゲッティ", dist: "遠出", min: 850, max: 1050, open: 11, close: 21 },
-    { name: "キッチンABC 池袋東口店", cat: "定食", sub: "がっつり", menu: "オムカツ", dist: "遠出", min: 900, max: 1200, open: 11, close: 21 },
-    { name: "別邸 壽", cat: "和食", sub: "あっさり", menu: "高級しゃぶしゃぶランチ", dist: "近場", min: 3000, max: 10000, open: 11, close: 15 }        
-];
+  const shops = [
+        { name: "竈門ご飯一穀 池袋西口店", cat: "定食", sub: "あっさり", menu: "一穀定食", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+        { name: "ナポリの下町食堂池袋店", cat: "イタリアン", sub: "あっさり", menu: "サラダ付きパスタランチ", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+        { name: "イケチカ ダイニング", cat: "定食", sub: "あっさり", menu: "蕎麦とおつまみセット", dist: "近場", min: 1000, max: 2000, open: 11, close: 23 },
+        { name: "湘聚・湖南菜館", cat: "中華", sub: "がっつり", menu: "本場の中華料理", dist: "近場", min: 1500, max: 3000, open: 11, close: 23 },
+        { name: "金のイタリアン", cat: "イタリアン", sub: "あっさり", menu: "洗練されたパスタランチ", dist: "遠出", min: 1000, max: 2500, open: 11, close: 22 },
+        { name: "ランチハウス ミトヤ", cat: "定食", sub: "がっつり", menu: "とんかつ定食", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
+        { name: "楽楽屋 池袋本店", cat: "中華", sub: "がっつり", menu: "選べる中華ランチ", dist: "近場", min: 800, max: 1500, open: 11, close: 23 },
+        { name: "ブラッスリー レトン", cat: "フランス料理", sub: "あっさり", menu: "コースランチ", dist: "近場", min: 2000, max: 4000, open: 11, close: 21 },
+        { name: "北海道イタリアンミアボッカ", cat: "イタリアン", sub: "あっさり", menu: "北海道食材パスタ", dist: "近場", min: 2000, max: 3000, open: 11, close: 22 },
+        { name: "あんぷく池袋店", cat: "うどん", sub: "あっさり", menu: "名物カルボナーラうどん", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+        { name: "大かまど飯 寅福", cat: "定食", sub: "あっさり", menu: "大かまど飯定食", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+        { name: "トロ政 池袋店", cat: "和食", sub: "がっつり", menu: "海鮮丼ランチ", dist: "近場", min: 1000, max: 2500, open: 11, close: 22 },
+        { name: "沖縄食堂 やんばる池袋店", cat: "和食", sub: "あっさり", menu: "ソーキそば", dist: "遠出", min: 800, max: 1200, open: 11, close: 23 },
+        { name: "洋庖丁 池袋店", cat: "定食", sub: "がっつり", menu: "スタミナ焼きランチ", dist: "近場", min: 800, max: 1000, open: 11, close: 21 },
+        { name: "TOMBOY 池袋東口店", cat: "カレー", sub: "がっつり", menu: "本格インドカレー", dist: "遠出", min: 1000, max: 2000, open: 11, close: 23 },
+        { name: "爽亭 JR池袋駅店", cat: "クイック", sub: "あっさり", menu: "かき揚げそば", dist: "近場", min: 400, max: 800, open: 7, close: 23 },
+        { name: "みなと", cat: "和食", sub: "がっつり", menu: "ガッツリ海鮮丼", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+        { name: "びすとろ UOKIN 池袋", cat: "ビストロ", sub: "あっさり", menu: "魚金の洋食ランチ", dist: "近場", min: 1200, max: 2500, open: 11, close: 23 },
+        { name: "一心", cat: "定食", sub: "がっつり", menu: "チーズメンチカツ定食", dist: "近場", min: 800, max: 1000, open: 11, close: 21 },
+        { name: "かえる食堂", cat: "カレー", sub: "がっつり", menu: "手作りカレー", dist: "遠出", min: 900, max: 1200, open: 11, close: 15 },
+        { name: "キッチンABC 西池袋店", cat: "定食", sub: "がっつり", menu: "焼肉チェックライス", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+        { name: "ハナオカフェ 池袋パルコ店", cat: "カフェ", sub: "あっさり", menu: "ハワイアンライスボウル", dist: "近場", min: 1000, max: 2000, open: 11, close: 23 },
+        { name: "Teishoku 美松", cat: "定食", sub: "あっさり", menu: "銀ダラみそ焼定食", dist: "近場", min: 2000, max: 3000, open: 11, close: 15 },
+        { name: "祥龍房 池袋店", cat: "中華", sub: "がっつり", menu: "鉄板アツアツ中華", dist: "近場", min: 800, max: 1000, open: 11, close: 24 },
+        { name: "Collabo_Index 池袋PARCO店", cat: "洋食", sub: "あっさり", menu: "日替わりランチ", dist: "近場", min: 1000, max: 2000, open: 11, close: 22 },
+        { name: "POLLO PORRO 東武池袋店", cat: "イタリアン", sub: "あっさり", menu: "パスタセット", dist: "近場", min: 2000, max: 3000, open: 11, close: 22 },
+        { name: "池袋大人のハンバーグ", cat: "洋食", sub: "がっつり", menu: "大人のハンバーグ", dist: "遠出", min: 1000, max: 2000, open: 11, close: 16 },
+        { name: "キッチン YAMITUKI", cat: "洋食", sub: "がっつり", menu: "明太子スパゲッティ", dist: "遠出", min: 850, max: 1050, open: 11, close: 21 },
+        { name: "キッチンABC 池袋東口店", cat: "定食", sub: "がっつり", menu: "オムカツ", dist: "遠出", min: 900, max: 1200, open: 11, close: 21 },
+        { name: "別邸 壽", cat: "和食", sub: "あっさり", menu: "高級しゃぶしゃぶランチ", dist: "近場", min: 3000, max: 10000, open: 11, close: 15 }
+    ];
     
     function decideLunch() {
         const cat = document.getElementById('category').value;
