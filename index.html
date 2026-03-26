@@ -160,6 +160,7 @@
 <script>
 // データ部分は省略せずに保持（shops配列）
 const shops = [
+  // --- 既存の71店舗 (維持) ---
   { name: "バロッサ", cat: "洋食", sub: "がっつり", menu: "カレー・ハンバーグ", dist: "近場", min: 1000, max: 2000, open: 11, close: 21, rating: 4.3 },
   { name: "キッチンABC 池袋東口店", cat: "定食", sub: "がっつり", menu: "オムカツセット", dist: "近場", min: 800, max: 1000, open: 11, close: 22, rating: 4.2 },
   { name: "ランチハウス ミトヤ", cat: "定食", sub: "がっつり", menu: "野菜と肉のタレ焼き定食", dist: "近場", min: 800, max: 1000, open: 11, close: 22, rating: 4.1 },
@@ -230,7 +231,38 @@ const shops = [
   { name: "おぼんdeごはん ルミネ池袋店", cat: "定食", sub: "あっさり", menu: "バランス定食", dist: "近場", min: 1200, max: 2000, open: 11, close: 22, rating: 3.9 },
   { name: "築地玉寿司 池袋サンシャイン店", cat: "寿司", sub: "あっさり", menu: "握り寿司ランチ", dist: "近場", min: 1500, max: 3000, open: 11, close: 21, rating: 4.0 },
   { name: "横浜家系ラーメン 池袋商店", cat: "ラーメン", sub: "がっつり", menu: "家系醤油豚骨ラーメン", dist: "近場", min: 800, max: 1200, open: 11, close: 27, rating: 3.8 },
-  { name: "78ステーキ 池袋本店", cat: "肉料理", sub: "がっつり", menu: "ステーキコンボ", dist: "近場", min: 1100, max: 2000, open: 11, close: 23, rating: 4.1 }
+  { name: "78ステーキ 池袋本店", cat: "肉料理", sub: "がっつり", menu: "ステーキコンボ", dist: "近場", min: 1100, max: 2000, open: 11, close: 23, rating: 4.1 },
+
+  // --- 新規追加 29店舗 (合計100店舗へ) ---
+  { name: "ラシーヌ ファーム トゥー パーク", cat: "洋食", sub: "あっさり", menu: "オーガニックサラダランチ", dist: "近場", min: 1500, max: 2500, open: 8, close: 22, rating: 4.4 },
+  { name: "伝説のすた丼屋 池袋店", cat: "肉料理", sub: "がっつり", menu: "すた丼", dist: "近場", min: 700, max: 1000, open: 11, close: 23, rating: 3.8 },
+  { name: "回し寿司 活 美登利 エチカ池袋店", cat: "寿司", sub: "がっつり", menu: "新鮮回転寿司", dist: "近場", min: 1500, max: 3000, open: 11, close: 22, rating: 4.3 },
+  { name: "梟助", cat: "定食", sub: "あっさり", menu: "サバの塩焼き定食", dist: "近場", min: 900, max: 1200, open: 11, close: 15, rating: 4.2 },
+  { name: "タカセ 池袋本店", cat: "洋食", sub: "あっさり", menu: "特製オムライス", dist: "近場", min: 1000, max: 2000, open: 11, close: 20, rating: 4.0 },
+  { name: "武蔵野アブラ学会 池袋店", cat: "ラーメン", sub: "がっつり", menu: "武蔵野油そば", dist: "近場", min: 700, max: 1000, open: 11, close: 24, rating: 4.1 },
+  { name: "にわとろ", cat: "肉料理", sub: "がっつり", menu: "鶏の炭火焼きランチ", dist: "近場", min: 1000, max: 1500, open: 11, close: 22, rating: 4.2 },
+  { name: "グッドモーニングカフェ 池袋ルミネ", cat: "洋食", sub: "あっさり", menu: "マーケットサラダランチ", dist: "近場", min: 1200, max: 2000, open: 11, close: 22, rating: 3.9 },
+  { name: "中国家庭料理 楊 2号店", cat: "中華", sub: "がっつり", menu: "汁なし担々麺", dist: "近場", min: 800, max: 1200, open: 11, close: 23, rating: 4.4 },
+  { name: "麺屋 六感堂", cat: "ラーメン", sub: "あっさり", menu: "塩グリーン麺", dist: "近場", min: 900, max: 1500, open: 11, close: 21, rating: 4.3 },
+  { name: "開楽 本店", cat: "中華", sub: "がっつり", menu: "ジャンボ餃子", dist: "近場", min: 800, max: 1200, open: 11, close: 23, rating: 4.5 },
+  { name: "火星カレー", cat: "カレー", sub: "がっつり", menu: "羊カレー", dist: "近場", min: 1000, max: 1500, open: 11, close: 21, rating: 4.2 },
+  { name: "麺屋武蔵 二天", cat: "ラーメン", sub: "がっつり", menu: "二天つけ麺", dist: "近場", min: 1000, max: 1500, open: 11, close: 22, rating: 4.1 },
+  { name: "ピッツァ ボルサ", cat: "イタリアン", sub: "あっさり", menu: "マルゲリータ", dist: "近場", min: 1000, max: 2000, open: 11, close: 22, rating: 4.6 },
+  { name: "そば処 嵯峨谷 池袋店", cat: "和食", sub: "あっさり", menu: "十割そば", dist: "近場", min: 500, max: 800, open: 10, close: 23, rating: 3.9 },
+  { name: "蘭州ラーメン 火焔山", cat: "ラーメン", sub: "あっさり", menu: "手打ち蘭州牛肉麺", dist: "近場", min: 900, max: 1200, open: 11, close: 23, rating: 4.0 },
+  { name: "レッドロック 池袋店", cat: "肉料理", sub: "がっつり", menu: "ローストビーフ丼", dist: "近場", min: 1000, max: 2000, open: 11, close: 22, rating: 4.1 },
+  { name: "すしざんまい 池袋東口店", cat: "寿司", sub: "あっさり", menu: "にぎりセット", dist: "近場", min: 1500, max: 3000, open: 0, close: 24, rating: 3.7 },
+  { name: "カリーハウスくじら", cat: "カレー", sub: "あっさり", menu: "ポークビンダルー", dist: "近場", min: 1000, max: 1500, open: 11, close: 20, rating: 4.3 },
+  { name: "ひなもと", cat: "定食", sub: "あっさり", menu: "鶏のみぞれ煮定食", dist: "近場", min: 900, max: 1200, open: 11, close: 15, rating: 4.1 },
+  { name: "牛かつ もと村 池袋店", cat: "肉料理", sub: "がっつり", menu: "牛かつ定食", dist: "近場", min: 1600, max: 2500, open: 11, close: 22, rating: 4.5 },
+  { name: "聚福楼", cat: "中華", sub: "がっつり", menu: "丸焼き羊肉", dist: "近場", min: 2000, max: 4000, open: 11, close: 23, rating: 4.2 },
+  { name: "札幌牛亭 南池袋店", cat: "肉料理", sub: "がっつり", menu: "ステーキハンバーグ", dist: "近場", min: 1500, max: 2500, open: 11, close: 21, rating: 4.4 },
+  { name: "とり鉄 池袋1丁目店", cat: "肉料理", sub: "がっつり", menu: "究極の親子丼", dist: "近場", min: 900, max: 1200, open: 11, close: 23, rating: 3.8 },
+  { name: "金沢まいもん寿司 池袋店", cat: "寿司", sub: "がっつり", menu: "北陸の幸にぎり", dist: "近場", min: 2000, max: 5000, open: 11, close: 22, rating: 4.4 },
+  { name: "池袋 鈴ん小屋", cat: "定食", sub: "あっさり", menu: "旬の刺身定食", dist: "近場", min: 1000, max: 1500, open: 11, close: 14, rating: 4.3 },
+  { name: "マレーチャン", cat: "アジア料理", sub: "あっさり", menu: "ナシゴレン", dist: "近場", min: 1000, max: 1500, open: 11, close: 23, rating: 4.2 },
+  { name: "グリル百世", cat: "洋食", sub: "がっつり", menu: "特製ハンバーグ", dist: "近場", min: 1200, max: 2000, open: 11, close: 21, rating: 4.0 },
+  { name: "ベトナム料理 フォーティンTOKYO", cat: "アジア料理", sub: "あっさり", menu: "牛肉のフォー", dist: "近場", min: 900, max: 1200, open: 11, close: 21, rating: 4.5 }
 ];
 
 function decideLunch() {
