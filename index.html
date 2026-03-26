@@ -103,7 +103,6 @@
 </div>
 
 <script>
-// --- ここから貼り付け ---
 const shops = [
   { name: "バロッサ", cat: "洋食", sub: "がっつり", menu: "カレー・ハンバーグ", dist: "近場", min: 1000, max: 2000, open: 11, close: 21, rating: 4.3 },
   { name: "キッチンABC 池袋東口店", cat: "定食", sub: "がっつり", menu: "オムカツセット", dist: "近場", min: 800, max: 1000, open: 11, close: 22, rating: 4.2 },
@@ -237,28 +236,9 @@ function displayResult(shop) {
     document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
     window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
 }
-// --- ここまで貼り付け ---
-        }
-    }, 80);
-}
-
-function displayResult(shop) {
-    const priceRange = `${shop.min.toLocaleString()}円〜${shop.max.toLocaleString()}円`;
-    document.getElementById('result-name').innerHTML = `${shop.name} <span class="budget-icon" style="background:#2f3542; color:white;">${priceRange}</span>`;
-    document.getElementById('recommend-menu').innerText = shop.menu;
-    const hour = new Date().getHours();
-    const isOpen = (hour >= shop.open && hour < shop.close);
-    document.getElementById('status').innerHTML = isOpen ? '<span class="status-open">● 営業中</span>' : '<span class="status-closed">○ 営業時間外かも</span>';
-    document.getElementById('tags').innerHTML = `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
-    document.getElementById('result-time').innerText = `目安: ${shop.open}:00〜${shop.close}:00`;
-    const q = encodeURIComponent(shop.name + " 池袋");
-    document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
-    window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
-}
 
 function resetHistory() { sessionStorage.removeItem('lunch_history'); location.reload(); }
 function updateHistoryCount(count) { document.getElementById('history-info').innerText = `本日チェックした件数: ${count}件`; }
-updateHistoryCount(JSON.parse(sessionStorage.getItem('lunch_history') || "[]").length);
 </script>
 </body>
 </html>
