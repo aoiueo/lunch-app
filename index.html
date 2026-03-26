@@ -9,15 +9,11 @@
         body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
         .container { max-width: 900px; margin: auto; }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        
-        /* 検索フォーム */
         .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         label { font-size: 0.8rem; font-weight: bold; color: #666; display: block; margin-bottom: 5px; }
         select, button { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; outline: none; }
         button { background: var(--main); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; grid-column: span 2; }
         button:hover { background: var(--accent); }
-
-        /* ガチャ演出用アニメーション */
         .slot-animation { animation: slot-blur 0.1s infinite; opacity: 0.7; color: #95a5a6 !important; }
         @keyframes slot-blur { 
             0% { transform: translateY(-2px); filter: blur(1px); }
@@ -26,13 +22,10 @@
         }
         .pop-in { animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop-in { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
-        /* 結果表示レイアウト */
         #result-container { display: none; margin-top: 20px; }
         .result-layout { display: flex; flex-wrap: wrap; gap: 20px; text-align: left; }
         .info-panel { flex: 1; min-width: 300px; }
         .map-panel { flex: 1; min-width: 300px; height: 350px; border-radius: 15px; overflow: hidden; border: 1px solid #eee; }
-        
         .shop-name { font-size: 1.8rem; font-weight: bold; color: var(--accent); margin-bottom: 10px; }
         .budget-icon { display: inline-block; background: #f1f2f6; color: #2f3542; padding: 2px 8px; border-radius: 8px; font-size: 0.9rem; margin-left: 10px; vertical-align: middle; border: 1px solid #ced4da; }
         .recommend-box { background: #fff9f0; border-left: 5px solid var(--main); padding: 10px 15px; margin: 15px 0; }
@@ -40,12 +33,7 @@
         .status-open { color: #27ae60; font-weight: bold; }
         .status-closed { color: #e74c3c; font-weight: bold; }
         iframe { width: 100%; height: 100%; border: none; }
-
-        @media (max-width: 600px) {
-            .search-grid { grid-template-columns: 1fr; }
-            button { grid-column: span 1; }
-            .result-layout { flex-direction: column; }
-        }
+        @media (max-width: 600px) { .search-grid { grid-template-columns: 1fr; } button { grid-column: span 1; } .result-layout { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -115,7 +103,6 @@
 </div>
 
 <script>
-    // 1. データベース：priceをminとmaxに分割
 const shops = [
   { name: "バロッサ", cat: "洋食", sub: "がっつり", menu: "カレー・ハンバーグ", dist: "近場", min: 1000, max: 2000, open: 11, close: 21 },
   { name: "キッチンABC 池袋東口店", cat: "定食", sub: "がっつり", menu: "オムカツセット", dist: "近場", min: 800, max: 1000, open: 11, close: 22 },
@@ -187,90 +174,67 @@ const shops = [
   { name: "おぼんdeごはん ルミネ池袋店", cat: "定食", sub: "あっさり", menu: "バランス定食", dist: "近場", min: 1200, max: 2000, open: 11, close: 22 },
   { name: "築地玉寿司 池袋サンシャイン店", cat: "寿司", sub: "あっさり", menu: "握り寿司ランチ", dist: "近場", min: 1500, max: 3000, open: 11, close: 21 },
   { name: "横浜家系ラーメン 池袋商店", cat: "ラーメン", sub: "がっつり", menu: "家系醤油豚骨ラーメン", dist: "近場", min: 800, max: 1200, open: 11, close: 27 },
-  { name: "78ステーキ 池袋本店", cat: "肉料理", sub: "がっつり", menu: "ステーキコンボ", dist: "近場", min: 1100, max: 2000, }  
+  { name: "78ステーキ 池袋本店", cat: "肉料理", sub: "がっつり", menu: "ステーキコンボ", dist: "近場", min: 1100, max: 2000, open: 11, close: 23 }
 ];
-    
-    function decideLunch() {
-        const cat = document.getElementById('category').value;
-        const mood = document.getElementById('mood').value;
-        const dist = document.getElementById('distance').value;
-        const budget = document.getElementById('budget').value;
-        
-        let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
 
-        // 2. 検索ロジック：min価格で判定するように修正
-        let filtered = shops.filter(s => {
-            const matchCat = (cat === 'any' || s.cat === cat);
-            const matchMood = (mood === 'any' || s.sub === mood);
-            const matchDist = (dist === 'any' || s.dist === dist);
-            // 予算の判定（s.price を s.min に変更）
-            const matchBudget = (budget === 'any' || s.min <= parseInt(budget) || (budget === "2000" && s.min >= 2000));
-            const notVisited = !history.includes(s.name);
-            return matchCat && matchMood && matchDist && matchBudget && notVisited;
-        });
-
-        if (filtered.length === 0) {
-            filtered = shops.filter(s => (cat === 'any' || s.cat === cat) && (mood === 'any' || s.sub === mood));
-            if(filtered.length > 0) alert("未訪問店を一周しました！全リストから再抽選します。");
-            else { alert("条件に合うお店がありません！"); return; }
+function decideLunch() {
+    const cat = document.getElementById('category').value;
+    const mood = document.getElementById('mood').value;
+    const dist = document.getElementById('distance').value;
+    const budget = document.getElementById('budget').value;
+    let history = JSON.parse(sessionStorage.getItem('lunch_history') || "[]");
+    let filtered = shops.filter(s => {
+        const matchCat = (cat === 'any' || s.cat === cat);
+        const matchMood = (mood === 'any' || s.sub === mood);
+        const matchDist = (dist === 'any' || s.dist === dist);
+        const matchBudget = (budget === 'any' || s.min <= parseInt(budget) || (budget === "2000" && s.min >= 2000));
+        const notVisited = !history.includes(s.name);
+        return matchCat && matchMood && matchDist && matchBudget && notVisited;
+    });
+    if (filtered.length === 0) {
+        filtered = shops.filter(s => (cat === 'any' || s.cat === cat) && (mood === 'any' || s.sub === mood));
+        if(filtered.length > 0) alert("未訪問店を一周しました！全リストから再抽選します。");
+        else { alert("条件に合うお店がありません！"); return; }
+    }
+    const nameDisplay = document.getElementById('result-name');
+    document.getElementById('result-container').style.display = 'block';
+    nameDisplay.classList.remove('pop-in');
+    nameDisplay.classList.add('slot-animation'); 
+    let count = 0;
+    const slotTimer = setInterval(() => {
+        const randomFake = shops[Math.floor(Math.random() * shops.length)];
+        nameDisplay.innerText = randomFake.name;
+        count++;
+        if (count > 15) {
+            clearInterval(slotTimer);
+            nameDisplay.classList.remove('slot-animation');
+            const chosen = filtered[Math.floor(Math.random() * filtered.length)];
+            history.push(chosen.name);
+            sessionStorage.setItem('lunch_history', JSON.stringify(history));
+            nameDisplay.classList.add('pop-in');
+            displayResult(chosen);
+            updateHistoryCount(history.length);
         }
+    }, 80);
+}
 
-        const nameDisplay = document.getElementById('result-name');
-        document.getElementById('result-container').style.display = 'block';
-        nameDisplay.classList.remove('pop-in');
-        nameDisplay.classList.add('slot-animation'); 
-        
-        let count = 0;
-        const slotTimer = setInterval(() => {
-            const randomFake = shops[Math.floor(Math.random() * shops.length)];
-            nameDisplay.innerText = randomFake.name;
-            count++;
+function displayResult(shop) {
+    const priceRange = `${shop.min.toLocaleString()}円〜${shop.max.toLocaleString()}円`;
+    document.getElementById('result-name').innerHTML = `${shop.name} <span class="budget-icon" style="background:#2f3542; color:white;">${priceRange}</span>`;
+    document.getElementById('recommend-menu').innerText = shop.menu;
+    const hour = new Date().getHours();
+    const isOpen = (hour >= shop.open && hour < shop.close);
+    document.getElementById('status').innerHTML = isOpen ? '<span class="status-open">● 営業中</span>' : '<span class="status-closed">○ 営業時間外かも</span>';
+    document.getElementById('tags').innerHTML = `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
+    document.getElementById('result-time').innerText = `目安: ${shop.open}:00〜${shop.close}:00`;
+    const q = encodeURIComponent(shop.name + " 池袋");
+    document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
+    window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
+}
 
-            if (count > 15) {
-                clearInterval(slotTimer);
-                nameDisplay.classList.remove('slot-animation');
-                const chosen = filtered[Math.floor(Math.random() * filtered.length)];
-                history.push(chosen.name);
-                sessionStorage.setItem('lunch_history', JSON.stringify(history));
-                nameDisplay.classList.add('pop-in');
-                displayResult(chosen);
-                updateHistoryCount(history.length);
-            }
-        }, 80);
-    }
-
-    // 3. 表示部分：円マーク計算を廃止し、min〜max表示へ
-    function displayResult(shop) {
-        // 価格表示を「800円〜1,100円」の形式に整形
-        const priceRange = `${shop.min.toLocaleString()}円〜${shop.max.toLocaleString()}円`;
-        
-        document.getElementById('result-name').innerHTML = 
-            `${shop.name} <span class="budget-icon" style="background:#2f3542; color:white;">${priceRange}</span>`;
-        
-        document.getElementById('recommend-menu').innerText = shop.menu;
-        
-        const hour = new Date().getHours();
-        const isOpen = (hour >= shop.open && hour < shop.close);
-        document.getElementById('status').innerHTML = isOpen ? '<span class="status-open">● 営業中</span>' : '<span class="status-closed">○ 営業時間外かも</span>';
-        document.getElementById('tags').innerHTML = `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
-        document.getElementById('result-time').innerText = `目安: ${shop.open}:00〜${shop.close}:00`;
-
-        const q = encodeURIComponent(shop.name + " 池袋");
-        document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
-        window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
-    }
-
-    function resetHistory() {
-        sessionStorage.removeItem('lunch_history');
-        location.reload();
-    }
-
-    function updateHistoryCount(count) {
-        document.getElementById('history-info').innerText = `本日チェックした件数: ${count}件`;
-    }
-
-    updateHistoryCount(JSON.parse(sessionStorage.getItem('lunch_history') || "[]").length);
+function resetHistory() { sessionStorage.removeItem('lunch_history'); location.reload(); }
+function updateHistoryCount(count) { document.getElementById('history-info').innerText = `本日チェックした件数: ${count}件`; }
+updateHistoryCount(JSON.parse(sessionStorage.getItem('lunch_history') || "[]").length);
 </script>
-
 </body>
 </html>
