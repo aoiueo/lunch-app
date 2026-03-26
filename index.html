@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IKEBUKURO LUNCH | モノトーン</title>
+    <title>IKEBUKURO LUNCH | MONOTONE</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --black: #1a1a1a;    /* 真っ黒すぎない黒 */
-            --dark-gray: #57606f; /* タグやラベル用 */
-            --mid-gray: #a4b0be;  /* 枠線や補助用 */
-            --light-gray: #dfe4ea; /* セレクトボックス背景用 */
-            --bg: #f1f2f6;       /* わずかに青みのある明るいグレー（背景） */
+            --black: #1a1a1a;
+            --dark-gray: #57606f;
+            --mid-gray: #a4b0be;
+            --light-gray: #dfe4ea;
+            --bg: #f1f2f6;
             --card-bg: #ffffff;
-            --btn-grad: linear-gradient(135deg, #2f3542, #1a1a1a); /* 黒系のグラデーション */
+            --btn-grad: linear-gradient(135deg, #2f3542, #1a1a1a);
         }
         
         body { 
@@ -22,92 +22,80 @@
             margin: 0; 
             padding: 10px; 
             color: var(--black); 
-            -webkit-font-smoothing: antialiased; /* 文字をきれいに見せる */
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container { max-width: 600px; margin: 20px auto; }
+        .container { max-width: 500px; margin: 10px auto; } /* 幅を少し絞ってさらにコンパクトに */
 
-        /* ヘッダーデザイン */
-        header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--mid-gray); padding-bottom: 15px; }
-        header h1 { font-size: 1.6rem; color: var(--black); margin: 0; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
-        header p { font-size: 0.8rem; color: var(--dark-gray); margin: 8px 0 0; }
+        header { text-align: center; margin-bottom: 15px; border-bottom: 2px solid var(--mid-gray); padding-bottom: 10px; }
+        header h1 { font-size: 1.4rem; color: var(--black); margin: 0; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+        header p { font-size: 0.7rem; color: var(--dark-gray); margin: 5px 0 0; }
 
         .card { 
             background: var(--card-bg); 
-            padding: 25px; 
-            border-radius: 16px; /* 角を少しシャープに */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.04); /* 影を薄く、洗練された印象に */
-            margin-bottom: 25px; 
+            padding: 18px; 
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            margin-bottom: 15px; 
             border: 1px solid rgba(0,0,0,0.02);
         }
 
-        .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
-        label { font-size: 0.75rem; font-weight: bold; color: var(--dark-gray); display: block; margin-bottom: 8px; margin-left: 5px; text-transform: uppercase; letter-spacing: 1px;}
+        label { font-size: 0.7rem; font-weight: bold; color: var(--dark-gray); display: block; margin-bottom: 5px; margin-left: 3px; text-transform: uppercase; }
         
         select { 
-            width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--light-gray); 
-            font-size: 15px; background: #ffffff; cursor: pointer; appearance: none;
-            transition: all 0.3s; color: var(--black);
+            width: 100%; padding: 10px; border-radius: 6px; border: 2px solid var(--light-gray); 
+            font-size: 14px; background: #ffffff; cursor: pointer; appearance: none; color: var(--black);
         }
-        select:focus { border-color: var(--black); outline: none; box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
 
-        /* ガチャボタン */
         .btn-main { 
             grid-column: span 2; background: var(--btn-grad); color: white; border: none; 
-            padding: 18px; border-radius: 12px; font-size: 1.1rem; font-weight: bold; 
-            cursor: pointer; transition: 0.3s; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-            margin-top: 10px; letter-spacing: 1px;
+            padding: 15px; border-radius: 10px; font-size: 1rem; font-weight: bold; 
+            cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-top: 5px; letter-spacing: 1px;
         }
-        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
-        .btn-main:active { transform: translateY(0); }
+        .btn-main:active { transform: scale(0.98); }
 
-        /* スロットアニメーション */
+        /* スロット・ポップイン */
         .slot-animation { animation: slot-blur 0.1s infinite; color: var(--mid-gray) !important; }
-        @keyframes slot-blur { 
-            0% { transform: scale(1); filter: blur(0px); }
-            50% { transform: scale(0.99); filter: blur(1.2px); }
-            100% { transform: scale(1); filter: blur(0px); }
-        }
+        @keyframes slot-blur { 0% { opacity: 0.8; filter: blur(1px); } 100% { opacity: 1; filter: blur(0px); } }
+        .pop-in { animation: pop-in 0.4s ease-out; }
+        @keyframes pop-in { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 
-        .pop-in { animation: pop-in 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-        @keyframes pop-in { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
-
-        /* 結果表示 */
-        #result-container { display: none; border: 2px solid var(--black); } /* 結果を黒枠で強調 */
-        .shop-name { font-size: 1.7rem; font-weight: bold; color: var(--black); margin-bottom: 5px; line-height: 1.2; letter-spacing: -0.5px; }
+        /* 結果表示（ここをコンパクトに！） */
+        #result-container { display: none; border: 2px solid var(--black); padding: 15px; }
+        .shop-name { font-size: 1.4rem; font-weight: bold; color: var(--black); margin-bottom: 2px; line-height: 1.2; }
         
-        .rating-stars { color: #f1c40f; /* 星だけは黄色を残す（視認性のため） */ font-size: 1.2rem; margin-bottom: 12px; }
+        .rating-stars { color: #f1c40f; font-size: 1.1rem; margin-bottom: 8px; }
         
         .recommend-box { 
-            background: var(--bg); border-radius: 12px; padding: 18px; 
-            margin: 18px 0; border: 1px solid var(--mid-gray);
+            background: var(--bg); border-radius: 8px; padding: 12px; 
+            margin: 10px 0; border: 1px solid var(--mid-gray);
         }
         
         .tag { 
-            display: inline-block; padding: 5px 14px; border-radius: 6px; 
-            font-size: 0.7rem; margin-right: 6px; background: var(--black); color: #ffffff;
-            font-weight: bold; letter-spacing: 0.5px;
+            display: inline-block; padding: 3px 10px; border-radius: 4px; 
+            font-size: 0.65rem; margin-right: 4px; background: var(--black); color: #ffffff;
+            font-weight: bold;
         }
 
         .map-panel { 
-            width: 100%; height: 280px; border-radius: 12px; 
-            overflow: hidden; margin-top: 18px; border: 1px solid var(--mid-gray);
+            width: 100%; height: 200px; border-radius: 8px; /* 高さを350→200に変更 */
+            overflow: hidden; margin-top: 12px; border: 1px solid var(--mid-gray);
         }
 
         .status-badge { 
-            display: inline-block; padding: 5px 12px; border-radius: 6px; 
-            font-size: 0.7rem; font-weight: bold; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;
+            display: inline-block; padding: 3px 10px; border-radius: 4px; 
+            font-size: 0.65rem; font-weight: bold; margin-bottom: 8px;
         }
-        .open { background: var(--black); color: #ffffff; } /* 営業中は黒背景に白文字 */
-        .closed { background: var(--light-gray); color: var(--dark-gray); } /* 時間外はグレー */
+        .open { background: var(--black); color: #ffffff; }
+        .closed { background: var(--light-gray); color: var(--dark-gray); }
 
         .btn-reset { 
-            background: none; border: 1px solid var(--mid-gray); color: var(--dark-gray); 
-            width: auto; padding: 7px 18px; border-radius: 6px; font-size: 0.7rem; margin-top: 25px; 
-            cursor: pointer; transition: 0.2s;
+            background: none; border: none; color: var(--mid-gray); text-decoration: underline;
+            padding: 0; font-size: 0.65rem; margin-top: 15px; cursor: pointer;
         }
-        .btn-reset:hover { background: var(--light-gray); color: var(--black); }
 
         @media (max-width: 400px) {
             .search-grid { grid-template-columns: 1fr; }
@@ -163,7 +151,6 @@
             </div>
             <button class="btn-main" onclick="decideLunch()">運命の1店を決定</button>
         </div>
-        <div id="history-info" style="font-size: 0.7rem; color: var(--mid-gray); text-align: center; margin-top: 18px; letter-spacing: 1px;"></div>
     </div>
 
     <div id="result-container" class="card pop-in">
@@ -173,21 +160,22 @@
         <div id="tags"></div>
         
         <div class="recommend-box">
-            <div style="font-size: 0.75rem; color: var(--black); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Recommended Menu</div>
-            <div id="recommend-menu" style="font-size: 1.15rem; font-weight: bold; margin-top: 6px; color: var(--black);"></div>
+            <div style="font-size: 0.65rem; color: var(--black); font-weight: bold; text-transform: uppercase;">Menu</div>
+            <div id="recommend-menu" style="font-size: 1rem; font-weight: bold; margin-top: 2px;"></div>
         </div>
         
-        <div id="result-time" style="font-size: 0.85rem; color: var(--dark-gray); font-weight: bold;"></div>
+        <div id="result-time" style="font-size: 0.75rem; color: var(--dark-gray);"></div>
         <div class="map-panel" id="map-area"></div>
         
-        <div style="text-align: right;">
-            <button class="btn-reset" onclick="resetHistory()">履歴をリセット</button>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div id="history-info" style="font-size: 0.65rem; color: var(--mid-gray); margin-top: 15px;"></div>
+            <button class="btn-reset" onclick="resetHistory()">履歴リセット</button>
         </div>
     </div>
 </div>
 
 <script>
-// データ部分は維持
+// (データ部分は同一のため省略せず保持します)
 const shops = [
   { name: "バロッサ", cat: "洋食", sub: "がっつり", menu: "カレー・ハンバーグ", dist: "近場", min: 1000, max: 2000, open: 11, close: 21, rating: 4.3 },
   { name: "キッチンABC 池袋東口店", cat: "定食", sub: "がっつり", menu: "オムカツセット", dist: "近場", min: 800, max: 1000, open: 11, close: 22, rating: 4.2 },
@@ -225,7 +213,7 @@ const shops = [
   { name: "叙庵 池袋サンシャイン60通り店", cat: "焼肉", sub: "がっつり", menu: "焼肉ランチ定食", dist: "近場", min: 1000, max: 2000, open: 11, close: 28, rating: 3.8 },
   { name: "焼肉こじま離れ 池袋", cat: "焼肉", sub: "がっつり", menu: "特選和牛ランチ", dist: "近場", min: 2000, max: 4000, open: 11, close: 23, rating: 4.4 },
   { name: "韓国家庭料理 自起屋", cat: "韓国料理", sub: "あっさり", menu: "スンドゥブチゲ", dist: "近場", min: 800, max: 1000, open: 11, close: 24, rating: 4.1 },
-  { name: "カラシビ味噌らー麺 鬼金棒", cat: "ラーメン", sub: "がっつり", menu: "カラシビ味噌らー麺", dist: "近場", min: 1000, max: 2000, open: 11, close: 21, rating: 4.5 },
+  { name: "カラシビ味噌らー麺 鬼金棒", cat: "ラーメン", sub: "がっつり", menu: "カラシビ味噌ららー麺", dist: "近場", min: 1000, max: 2000, open: 11, close: 21, rating: 4.5 },
   { name: "築地食堂源ちゃん", cat: "海鮮", sub: "あっさり", menu: "源ちゃん丼", dist: "近場", min: 1000, max: 2000, open: 11, close: 22, rating: 3.6 },
   { name: "博多もつ鍋やまや 池袋店", cat: "定食", sub: "がっつり", menu: "鶏の唐揚げ明太風味定食", dist: "近場", min: 1300, max: 2000, open: 11, close: 22, rating: 4.0 },
   { name: "大戸屋ごはん処 池袋東口店", cat: "定食", sub: "あっさり", menu: "鶏と野菜の黒酢あん定食", dist: "近場", min: 900, max: 1500, open: 11, close: 23, rating: 3.9 },
@@ -294,7 +282,7 @@ function decideLunch() {
         const randomFake = shops[Math.floor(Math.random() * shops.length)];
         nameDisplay.innerText = randomFake.name;
         count++;
-        if (count > 15) {
+        if (count > 12) { /* 演出時間を少し短縮 */
             clearInterval(slotTimer);
             nameDisplay.classList.remove('slot-animation');
             const chosen = filtered[Math.floor(Math.random() * filtered.length)];
@@ -312,32 +300,33 @@ function displayResult(shop) {
     const starIcons = shop.rating ? "⭐".repeat(Math.floor(shop.rating)) : "";
 
     document.getElementById('result-name').innerText = shop.name;
-    // 星は色を維持（黄色の方が見やすいため。ここもモノトーンにしたい場合はコメントアウトを外す）
-    document.getElementById('rating-area').innerHTML = `${starIcons} <span style="color:#2d3436; font-size:0.9rem; margin-left:5px;">${ratingVal}</span>`;
-    // document.getElementById('rating-area').innerHTML = `<span style="color:#2d3436; font-size:1.2rem;">★</span> <span style="color:#2d3436; font-size:0.9rem; margin-left:5px;">${ratingVal}</span>`; // 完全モノトーン版
-    
+    document.getElementById('rating-area').innerHTML = `${starIcons} <span style="color:#2d3436; font-size:0.8rem; margin-left:5px;">${ratingVal}</span>`;
     document.getElementById('recommend-menu').innerText = shop.menu;
     
     const hour = new Date().getHours();
     const isOpen = (hour >= shop.open && hour < shop.close);
     const statusBadge = document.getElementById('status-badge');
-    statusBadge.innerText = isOpen ? "● 営業中" : "○ 営業時間外";
+    statusBadge.innerText = isOpen ? "● OPEN" : "○ CLOSED";
     statusBadge.className = `status-badge ${isOpen ? 'open' : 'closed'}`;
     
     document.getElementById('tags').innerHTML = `
-        <span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">💰 ${priceRange}</span>
+        <span class="tag">${shop.cat}</span><span class="tag">💰 ${priceRange}</span>
     `;
     
-    document.getElementById('result-time').innerText = `🕒 営業時間: ${shop.open}:00 〜 ${shop.close}:00`;
+    document.getElementById('result-time').innerText = `🕒 ${shop.open}:00 〜 ${shop.close}:00`;
 
     const q = encodeURIComponent(shop.name + " 池袋");
     document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}" style="width:100%; height:100%; border:none;"></iframe>`;
     
-    window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
+    // スクロール位置をカードのトップにピタッと合わせる
+    window.scrollTo({ 
+        top: document.getElementById('result-container').offsetTop, 
+        behavior: 'smooth' 
+    });
 }
 
 function resetHistory() { sessionStorage.removeItem('lunch_history'); location.reload(); }
-function updateHistoryCount(count) { document.getElementById('history-info').innerText = `本日チェックしたお店: ${count}軒`; }
+function updateHistoryCount(count) { document.getElementById('history-info').innerText = `Checked: ${count}`; }
 updateHistoryCount(JSON.parse(sessionStorage.getItem('lunch_history') || "[]").length);
 </script>
 </body>
