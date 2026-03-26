@@ -203,6 +203,7 @@ const shops = [
             const matchCat = (cat === 'any' || s.cat === cat);
             const matchMood = (mood === 'any' || s.sub === mood);
             const matchDist = (dist === 'any' || s.dist === dist);
+            const starIcons = "⭐".repeat(Math.floor(randomShop.rating));
             // 予算の判定（s.price を s.min に変更）
             const matchBudget = (budget === 'any' || s.min <= parseInt(budget) || (budget === "2000" && s.min >= 2000));
             const notVisited = !history.includes(s.name);
