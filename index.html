@@ -11,9 +11,8 @@
             --dark-gray: #2c3e50;
             --mid-gray: #95a5a6;
             --light-gray: #ecf0f1;
-            --bg: #f8f9fa; /* より明るい背景 */
+            --bg: #f8f9fa;
             --card-bg: #ffffff;
-            --accent: #000000;
         }
         
         body { 
@@ -26,22 +25,16 @@
             min-height: 100vh;
         }
 
-        /* 全体レイアウト */
         .main-wrapper {
             display: grid;
-            grid-template-columns: 350px 1fr; /* 左固定、右可変 */
+            grid-template-columns: 350px 1fr;
             gap: 20px;
             width: 100%;
             max-width: 1200px;
             padding: 40px 20px;
         }
 
-        /* 左側：設定エリア */
-        .sidebar {
-            position: sticky;
-            top: 40px;
-            height: fit-content;
-        }
+        .sidebar { position: sticky; top: 40px; height: fit-content; }
 
         header { margin-bottom: 30px; }
         header h1 { font-size: 1.8rem; letter-spacing: 3px; margin: 0; border-left: 5px solid var(--black); padding-left: 15px; }
@@ -50,9 +43,9 @@
         .config-card { 
             background: var(--card-bg); 
             padding: 30px; 
-            border-radius: 4px; /* シャープな角 */
+            border-radius: 4px;
             border: 1px solid #eee;
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.05); /* 影を面で表現 */
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.05);
         }
 
         .search-grid { display: flex; flex-direction: column; gap: 20px; }
@@ -69,11 +62,6 @@
         }
         .btn-main:hover { background: #333; }
 
-        /* 右側：結果エリア */
-        .content-area {
-            min-height: 400px;
-        }
-
         #result-container { 
             display: none; 
             background: white;
@@ -81,7 +69,10 @@
             border-radius: 4px;
             border: 1px solid #eee;
             box-shadow: 15px 15px 0px rgba(0,0,0,0.02);
+            animation: pop-in 0.4s ease-out;
         }
+
+        @keyframes pop-in { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 
         .result-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
         .shop-name { font-size: 2.2rem; font-weight: bold; line-height: 1.1; margin: 0; flex: 1; }
@@ -90,7 +81,7 @@
         .open { background: #000; color: #fff; }
         .closed { background: #fff; color: #ccc; border-color: #ccc; }
 
-        .rating-stars { color: #000; font-size: 1.2rem; margin: 10px 0; }
+        .rating-stars { color: #f1c40f; font-size: 1.2rem; margin: 10px 0; }
         
         .recommend-box { 
             border-top: 1px solid #eee; border-bottom: 1px solid #eee;
@@ -103,13 +94,17 @@
         }
 
         .map-panel { 
-            width: 100%; height: 450px; /* PCでは大きく */
+            width: 100%; height: 450px; 
             background: #eee; margin-top: 20px; 
         }
 
         .footer-tools { display: flex; justify-content: space-between; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
 
-        /* スマホ対応（1カラムに戻す） */
+        #empty-state {
+            height: 100%; display: flex; align-items: center; justify-content: center; 
+            color: #ccc; border: 2px dashed #ddd; border-radius: 4px;
+        }
+
         @media (max-width: 900px) {
             .main-wrapper { grid-template-columns: 1fr; padding: 10px; }
             .sidebar { position: static; }
@@ -126,82 +121,44 @@
             <h1>IKEBUKURO<br>LUNCH</h1>
             <p>池袋1丁目 飲食店セレクト</p>
         </header>
-
         <div class="config-card">
             <div class="search-grid">
-                <div>
-                    <label>Category</label>
-                    <select id="category">
-                        <option value="any">なんでも</option>
-                        <option value="定食">🍚 定食・お米</option>
-                        <option value="ラーメン">🍜 ラーメン・つけ麺</option>
-                        <option value="中華">🐼 中華・エスニック</option>
-                        <option value="洋食">🍳 洋食・カレー</option>
-                        <option value="肉料理">🥩 肉料理</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Mood</label>
-                    <select id="mood">
-                        <option value="any">なんでも</option>
-                        <option value="がっつり">🔥 がっつり</option>
-                        <option value="あっさり">🍃 あっさり</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Distance</label>
-                    <select id="distance">
-                        <option value="any">指定なし</option>
-                        <option value="近場">近場（5分以内）</option>
-                        <option value="遠出">少し歩く</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Budget</label>
-                    <select id="budget">
-                        <option value="any">指定なし</option>
-                        <option value="1000">1,000円以内</option>
-                        <option value="1500">1,500円以内</option>
-                        <option value="2000">2,000円以上</option>
-                    </select>
-                </div>
+                <div><label>Category</label><select id="category"><option value="any">なんでも</option><option value="定食">🍚 定食・お米</option><option value="ラーメン">🍜 ラーメン・つけ麺</option><option value="中華">🐼 中華・エスニック</option><option value="洋食">🍳 洋食・カレー</option><option value="肉料理">🥩 肉料理</option></select></div>
+                <div><label>Mood</label><select id="mood"><option value="any">なんでも</option><option value="がっつり">🔥 がっつり</option><option value="あっさり">🍃 あっさり</option></select></div>
+                <div><label>Distance</label><select id="distance"><option value="any">指定なし</option><option value="近場">近場（5分以内）</option><option value="遠出">少し歩く</option></select></div>
+                <div><label>Budget</label><select id="budget"><option value="any">指定なし</option><option value="1000">1,000円以内</option><option value="1500">1,500円以内</option><option value="2000">2,000円以上</option></select></div>
                 <button class="btn-main" onclick="decideLunch()">運命の店を探す →</button>
             </div>
         </div>
     </div>
 
     <div class="content-area">
-        <div id="result-container" class="pop-in">
+        <div id="result-container">
             <div class="result-header">
                 <h2 id="result-name" class="shop-name"></h2>
                 <div id="status-badge" class="status-badge"></div>
             </div>
-            
             <div id="rating-area" class="rating-stars"></div>
             <div id="tags"></div>
-            
             <div class="recommend-box">
                 <label>Recommended Menu</label>
                 <div id="recommend-menu" style="font-size: 1.4rem; font-weight: bold; margin-top: 10px;"></div>
             </div>
-            
             <div id="result-time" style="font-size: 0.9rem; font-weight: bold;"></div>
             <div class="map-panel" id="map-area"></div>
-            
             <div class="footer-tools">
                 <div id="history-info" style="font-size: 0.7rem; color: var(--mid-gray);"></div>
                 <button style="background:none; border:none; text-decoration:underline; font-size:0.7rem; cursor:pointer;" onclick="resetHistory()">履歴をクリア</button>
             </div>
         </div>
-        
-        <div id="empty-state" style="height:100%; display:flex; align-items:center; justify-content:center; color:#ccc; border:2px dashed #ddd; border-radius:4px;">
+        <div id="empty-state">
             <p>左のボタンを押して、今日のお店を決めましょう</p>
         </div>
     </div>
 </div>
 
 <script>
-// データとロジックは引き継ぎ
+// データ部分は省略せずに保持（shops配列）
 const shops = [
   { name: "バロッサ", cat: "洋食", sub: "がっつり", menu: "カレー・ハンバーグ", dist: "近場", min: 1000, max: 2000, open: 11, close: 21, rating: 4.3 },
   { name: "キッチンABC 池袋東口店", cat: "定食", sub: "がっつり", menu: "オムカツセット", dist: "近場", min: 800, max: 1000, open: 11, close: 22, rating: 4.2 },
@@ -317,7 +274,7 @@ function displayResult(shop) {
     document.getElementById('result-name').innerText = shop.name;
     const ratingVal = shop.rating ? shop.rating.toFixed(1) : "---";
     const starIcons = shop.rating ? "★".repeat(Math.floor(shop.rating)) : "";
-    document.getElementById('rating-area').innerHTML = `${starIcons} <span style="font-size:0.9rem; margin-left:10px;">Rating: ${ratingVal}</span>`;
+    document.getElementById('rating-area').innerHTML = `${starIcons} <span style="font-size:0.9rem; margin-left:10px; color:#666;">Rating: ${ratingVal}</span>`;
     document.getElementById('recommend-menu').innerText = shop.menu;
     
     const hour = new Date().getHours();
@@ -330,9 +287,9 @@ function displayResult(shop) {
     document.getElementById('result-time').innerText = `🕒 Hours: ${shop.open}:00 〜 ${shop.close}:00`;
 
     const q = encodeURIComponent(shop.name + " 池袋");
-    document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}" style="width:100%; height:100%; border:none; filter: grayscale(100%);"></iframe>`;
+    // 地図のグレースケールフィルタを削除し、カラーで表示
+    document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}" style="width:100%; height:100%; border:none;"></iframe>`;
     
-    // PCではサイドバーがあるためスクロール不要だが、スマホ用に残す
     if(window.innerWidth < 900) {
         window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
     }
