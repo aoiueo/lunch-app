@@ -203,7 +203,7 @@ const shops = [
             const matchCat = (cat === 'any' || s.cat === cat);
             const matchMood = (mood === 'any' || s.sub === mood);
             const matchDist = (dist === 'any' || s.dist === dist);
-            const starIcons = "⭐".repeat(Math.floor(randomShop.rating));
+            
             // 予算の判定（s.price を s.min に変更）
             const matchBudget = (budget === 'any' || s.min <= parseInt(budget) || (budget === "2000" && s.min >= 2000));
             const notVisited = !history.includes(s.name);
@@ -242,23 +242,38 @@ const shops = [
 
     // 3. 表示部分：円マーク計算を廃止し、min〜max表示へ
     function displayResult(shop) {
-        // 価格表示を「800円〜1,100円」の形式に整形
+       // 3. 表示部分：評価（星）と価格を表示
+    function displayResult(shop) {
+        // 価格表示の整形
         const priceRange = `${shop.min.toLocaleString()}円〜${shop.max.toLocaleString()}円`;
         
+        // 【追加】星マークと数値の生成（データがない場合は「評価なし」にする安全策）
+        const ratingVal = shop.rating ? shop.rating : "---";
+        const starIcons = shop.rating ? "⭐".repeat(Math.floor(shop.rating)) : "評価なし";
+
+        // 店名と価格を表示
         document.getElementById('result-name').innerHTML = 
             `${shop.name} <span class="budget-icon" style="background:#2f3542; color:white;">${priceRange}</span>`;
+        
+        // 【修正】営業時間の「上らへん」に星マークを表示
+        document.getElementById('tags').innerHTML = `
+            <div style="color: #f1c40f; font-size: 1.2rem; font-weight: bold; margin-bottom: 8px;">
+                ${starIcons} ${ratingVal}
+            </div>
+            <span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>
+        `;
         
         document.getElementById('recommend-menu').innerText = shop.menu;
         
         const hour = new Date().getHours();
         const isOpen = (hour >= shop.open && hour < shop.close);
         document.getElementById('status').innerHTML = isOpen ? '<span class="status-open">● 営業中</span>' : '<span class="status-closed">○ 営業時間外かも</span>';
-        document.getElementById('tags').innerHTML = `<span class="tag">${shop.cat}</span><span class="tag">${shop.sub}</span><span class="tag">${shop.dist}</span>`;
         document.getElementById('result-time').innerText = `目安: ${shop.open}:00〜${shop.close}:00`;
 
         const q = encodeURIComponent(shop.name + " 池袋");
         document.getElementById('map-area').innerHTML = `<iframe src="https://maps.google.co.jp/maps?output=embed&q=${q}"></iframe>`;
         window.scrollTo({ top: document.getElementById('result-container').offsetTop - 20, behavior: 'smooth' });
+    }
     }
 
     function resetHistory() {
